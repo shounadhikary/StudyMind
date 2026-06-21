@@ -1,0 +1,350 @@
+// StudyMind database schema (PostgreSQL via Supabase, with pgvector).
+// The connection URL lives in prisma.config.ts (Prisma 7 convention).
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum GoalType {
+  STUDY_MINUTES
+  CARDS_REVIEWED
+  QUIZZES_TAKEN
+}
+
+enum GoalPeriod {
+  DAILY
+  WEEKLY
+}
+
+enum ShareResourceType {
+  QUIZ
+  FLASHCARD_DECK
+}
+
+// ---------------------------------------------------------------------------
+// Core: users & documents
+// ---------------------------------------------------------------------------
+
+model User {
+  id          String   @id // Clerk user id
+  email       String   @unique
+  name        String?
+  avatarUrl   String?  @map("avatar_url")
+  preferences Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  documents      Document[]
+  chats          Chat[]
+  quizzes        Quiz[]
+  quizAttempts   QuizAttempt[]
+  flashcardDecks FlashcardDeck[]
+  mindMaps       MindMap[]
+  tasks          Task[]
+  focusSessions  FocusSession[]
+  goals          Goal[]
+  achievements   Achievement[]
+  streak         Streak?
+
+  @@map("users")
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  title     String
+  fileUrl   String?  @map("file_url")
+  rawText   String?  @map("raw_text")
+  pageCount Int?     @map("page_count")
+  language  String   @default("en")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks         DocumentChunk[]
+  summaries      Summary[]
+  quizzes        Quiz[]
+  flashcardDecks FlashcardDeck[]
+  mindMaps       MindMap[]
+  tasks          Task[]
+  focusSessions  FocusSession[]
+
+  @@index([userId])
+  @@map("documents")
+}
+
+model DocumentChunk {
+  id         String   @id @default(cuid())
+  documentId String   @map("document_id")
+  chunkIndex Int      @map("chunk_index")
+  content    String
+  pageNumber Int?     @map("page_number")
+  // pgvector column (Gemini text-embedding-004 = 768 dims). Typed as Unsupported
+  // because Prisma has no native vector type — written/queried via raw SQL.
+  // Requires the `vector` extension enabled in Supabase, plus an ANN index
+  // (ivfflat/hnsw) added in a manual migration.
+  embedding  Unsupported("vector(768)")?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, chunkIndex])
+  @@index([documentId])
+  @@map("document_chunks")
+}
+
+// ---------------------------------------------------------------------------
+// AI artifacts: summaries, chat, quizzes, flashcards, mind maps
+// ---------------------------------------------------------------------------
+
+model Summary {
+  id         String   @id @default(cuid())
+  documentId String   @map("document_id")
+  content    Json
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@map("summaries")
+}
+
+model Chat {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  documentIds String[] @map("document_ids")
+  title       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([userId])
+  @@map("chats")
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  chatId    String      @map("chat_id")
+  role      MessageRole
+  content   String
+  // Retrieved source chunks: [{ documentId, chunkId, pageNumber, snippet }]
+  citations Json?
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@index([chatId])
+  @@map("chat_messages")
+}
+
+model Quiz {
+  id         String     @id @default(cuid())
+  documentId String     @map("document_id")
+  userId     String     @map("user_id")
+  difficulty Difficulty @default(MEDIUM)
+  questions  Json
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  document Document      @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempts QuizAttempt[]
+
+  @@index([documentId])
+  @@index([userId])
+  @@map("quizzes")
+}
+
+model QuizAttempt {
+  id      String   @id @default(cuid())
+  quizId  String   @map("quiz_id")
+  userId  String   @map("user_id")
+  answers Json
+  score   Float
+  takenAt DateTime @default(now()) @map("taken_at")
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+  @@index([userId])
+  @@map("quiz_attempts")
+}
+
+model FlashcardDeck {
+  id         String   @id @default(cuid())
+  documentId String   @map("document_id")
+  userId     String   @map("user_id")
+  title      String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  document   Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  flashcards Flashcard[]
+
+  @@index([documentId])
+  @@index([userId])
+  @@map("flashcard_decks")
+}
+
+model Flashcard {
+  id        String    @id @default(cuid())
+  deckId    String    @map("deck_id")
+  front     String
+  back      String
+  // SM-2 state: { ease, interval, repetitions, lapses }
+  srState   Json      @default("{}") @map("sr_state")
+  // Denormalized from srState for efficient "due today" queries.
+  dueDate   DateTime? @map("due_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  deck FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+
+  @@index([deckId])
+  @@index([dueDate])
+  @@map("flashcards")
+}
+
+model MindMap {
+  id         String   @id @default(cuid())
+  documentId String   @map("document_id")
+  userId     String   @map("user_id")
+  // Hierarchical concept graph: { nodes: [...], edges: [...] }
+  structure  Json
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@index([userId])
+  @@map("mind_maps")
+}
+
+// ---------------------------------------------------------------------------
+// Productivity: tasks, focus sessions, goals, streaks, achievements
+// ---------------------------------------------------------------------------
+
+model Task {
+  id         String       @id @default(cuid())
+  userId     String       @map("user_id")
+  title      String
+  subject    String?
+  documentId String?      @map("document_id")
+  dueDate    DateTime?    @map("due_date")
+  priority   TaskPriority @default(MEDIUM)
+  status     TaskStatus   @default(TODO)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([documentId])
+  @@map("tasks")
+}
+
+model FocusSession {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  duration    Int // seconds
+  subject     String?
+  documentId  String?  @map("document_id")
+  completedAt DateTime @default(now()) @map("completed_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("focus_sessions")
+}
+
+model Goal {
+  id        String     @id @default(cuid())
+  userId    String     @map("user_id")
+  type      GoalType
+  target    Int
+  period    GoalPeriod @default(DAILY)
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("goals")
+}
+
+model Streak {
+  id             String    @id @default(cuid())
+  userId         String    @unique @map("user_id")
+  currentStreak  Int       @default(0) @map("current_streak")
+  longestStreak  Int       @default(0) @map("longest_streak")
+  lastActiveDate DateTime? @map("last_active_date")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("streaks")
+}
+
+model Achievement {
+  id       String   @id @default(cuid())
+  userId   String   @map("user_id")
+  badgeKey String   @map("badge_key")
+  earnedAt DateTime @default(now()) @map("earned_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeKey])
+  @@index([userId])
+  @@map("achievements")
+}
+
+// ---------------------------------------------------------------------------
+// Sharing
+// ---------------------------------------------------------------------------
+
+model Share {
+  id           String            @id @default(cuid())
+  resourceType ShareResourceType @map("resource_type")
+  resourceId   String            @map("resource_id")
+  publicToken  String            @unique @map("public_token")
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  @@index([resourceType, resourceId])
+  @@map("shares")
+}
