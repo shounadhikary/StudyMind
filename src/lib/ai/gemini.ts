@@ -4,6 +4,7 @@ import { GoogleGenAI, type Content } from "@google/genai";
 
 import {
   AIError,
+  EMBEDDING_DIMENSIONS,
   toAIError,
   type AIChatMessage,
   type ChatOptions,
@@ -12,10 +13,11 @@ import {
   type TextProvider,
 } from "./types";
 
-// gemini-2.0-flash: large context window, strong structured output, generous
-// free tier — our primary for generation/summaries and the only embedder.
-const GEMINI_TEXT_MODEL = "gemini-2.0-flash";
-const GEMINI_EMBED_MODEL = "text-embedding-004";
+// gemini-2.5-flash: large context window, strong structured output — our
+// primary for generation/summaries. gemini-embedding-001 is the current GA
+// embedding model; we request 768 dims to match the pgvector column.
+const GEMINI_TEXT_MODEL = "gemini-2.5-flash";
+const GEMINI_EMBED_MODEL = "gemini-embedding-001";
 
 let client: GoogleGenAI | null = null;
 
@@ -108,6 +110,7 @@ export const gemini: TextProvider & EmbeddingProvider = {
       const response = await getClient().models.embedContent({
         model: GEMINI_EMBED_MODEL,
         contents: texts,
+        config: { outputDimensionality: EMBEDDING_DIMENSIONS },
       });
       const embeddings = response.embeddings;
       if (!embeddings || embeddings.length === 0) {

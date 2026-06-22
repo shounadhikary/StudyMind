@@ -16,8 +16,13 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
+  const connectionString = process.env.DATABASE_URL;
+  // Supabase poolers require an encrypted connection; the pooler cert isn't in
+  // the default CA bundle, so we encrypt without strict CA verification.
+  const useSsl = /supabase\.com|pooler/.test(connectionString ?? "");
   const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL,
+    connectionString,
+    ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
   });
   return new PrismaClient({
     adapter,
