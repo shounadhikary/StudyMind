@@ -16,7 +16,7 @@ const SECTIONS = [
   },
   {
     heading: "AI-generated material",
-    body: "Summaries, answers, quizzes, and other AI output can be imperfect. Treat them as a study aid, not an authoritative source — always verify against your original material.",
+    body: "Summaries, answers, quizzes, and other AI output can be imperfect. Treat them as a study aid, not an authoritative source - always verify against your original material.",
   },
   {
     heading: "Availability",

@@ -26,7 +26,7 @@ export default async function LeaderboardPage() {
     <div className="space-y-8">
       <PageHeader
         title="Leaderboard"
-        description="Opt-in study rankings — XP from quizzes, reviews, and streaks."
+        description="Opt-in study rankings - XP from quizzes, reviews, and streaks."
       />
 
       <LeaderboardOptIn optedIn={pref.optedIn} name={pref.name} />
@@ -35,7 +35,7 @@ export default async function LeaderboardPage() {
         <EmptyState
           icon={Trophy}
           title="No one's on the leaderboard yet"
-          description="Be the first to join — opt in above and start earning XP."
+          description="Be the first to join - opt in above and start earning XP."
         />
       ) : (
         <div className="space-y-2">

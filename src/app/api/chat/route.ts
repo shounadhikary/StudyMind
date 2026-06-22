@@ -94,7 +94,7 @@ export async function POST(req: Request) {
         if (!full) {
           controller.enqueue(
             encoder.encode(
-              "Sorry — I couldn't generate a response right now. Please try again.",
+              "Sorry - I couldn't generate a response right now. Please try again.",
             ),
           );
         }

@@ -15,7 +15,7 @@ export default function AboutPage() {
       <div className="mt-8 space-y-6 text-muted-foreground text-pretty">
         <p>
           StudyMind is an AI-powered study companion. Students upload their
-          study materials — PDFs, notes, slides — and the app turns them into
+          study materials - PDFs, notes, slides - and the app turns them into
           summaries, cited answers, quizzes, flashcards, and mind maps, then
           helps them stay on track with planning and progress insights.
         </p>

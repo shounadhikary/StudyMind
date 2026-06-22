@@ -193,7 +193,7 @@ function QuizResults({
                 </div>
                 <div className="space-y-1 pl-7 text-sm">
                   <p className={r.correct ? "text-muted-foreground" : "text-destructive"}>
-                    Your answer: {r.userAnswer || "—"}
+                    Your answer: {r.userAnswer || "-"}
                   </p>
                   {!r.correct ? (
                     <p className="text-chart-2">Correct answer: {r.correctAnswer}</p>

@@ -114,7 +114,7 @@ export function PreferencesForm({
           {LANGUAGES.map((l) => (
             <option key={l.value} value={l.value} disabled={!l.available}>
               {l.label}
-              {l.available ? "" : " — coming soon"}
+              {l.available ? "" : " - coming soon"}
             </option>
           ))}
         </select>

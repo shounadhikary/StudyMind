@@ -6,7 +6,7 @@ for Bengali and German.
 ## How it works
 
 - `locales/en.ts` defines the message dictionary and exports the `Messages`
-  type — the contract every locale must satisfy.
+  type - the contract every locale must satisfy.
 - `index.ts` exposes `Locale`, `DEFAULT_LOCALE`, `AVAILABLE_LOCALES`, and
   `getMessages(locale)`.
 - A user's language preference is stored in their settings (`language`).

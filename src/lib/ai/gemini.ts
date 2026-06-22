@@ -13,7 +13,7 @@ import {
   type TextProvider,
 } from "./types";
 
-// gemini-2.5-flash: large context window, strong structured output — our
+// gemini-2.5-flash: large context window, strong structured output - our
 // primary for generation/summaries. gemini-embedding-001 is the current GA
 // embedding model; we request 768 dims to match the pgvector column.
 const GEMINI_TEXT_MODEL = "gemini-2.5-flash";

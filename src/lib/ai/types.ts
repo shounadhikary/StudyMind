@@ -1,8 +1,8 @@
 /**
  * Shared types and constants for the AI abstraction layer.
  *
- * The layer exposes a small, provider-agnostic surface — `generate`,
- * `generateJSON`, `chatStream`, and `embed` — implemented by swappable
+ * The layer exposes a small, provider-agnostic surface - `generate`,
+ * `generateJSON`, `chatStream`, and `embed` - implemented by swappable
  * providers (Gemini, Groq) behind a router that falls back on rate-limit/error.
  */
 
@@ -45,7 +45,7 @@ export interface EmbeddingProvider {
   embed(texts: string[]): Promise<number[][]>;
 }
 
-/** Embedding dimensionality (Gemini text-embedding-004) — matches the
+/** Embedding dimensionality (Gemini text-embedding-004) - matches the
  *  `vector(768)` column in the Prisma schema. */
 export const EMBEDDING_DIMENSIONS = 768;
 

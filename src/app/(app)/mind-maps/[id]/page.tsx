@@ -41,7 +41,7 @@ export default async function MindMapDetailPage({
           {tree.title}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Drag to pan, scroll to zoom, and use the +/− buttons to expand or
+          Drag to pan, scroll to zoom, and use the +/- buttons to expand or
           collapse branches.
         </p>
       </div>

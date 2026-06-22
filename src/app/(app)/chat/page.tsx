@@ -95,7 +95,7 @@ export default async function ChatPage({
     <div className="space-y-8">
       <PageHeader
         title="AI Chat"
-        description="Chat across one or more documents — answers come with citations."
+        description="Chat across one or more documents - answers come with citations."
         actions={documents.length > 0 ? <UploadDialog /> : undefined}
       />
 

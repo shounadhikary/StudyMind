@@ -79,7 +79,7 @@ const STEPS = [
   {
     icon: Upload,
     title: "Upload",
-    description: "Drop in a PDF or paste your notes — text is extracted server-side.",
+    description: "Drop in a PDF or paste your notes - text is extracted server-side.",
   },
   {
     icon: Wand2,
@@ -109,7 +109,7 @@ export default function LandingPage() {
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground text-pretty">
           Upload your study materials and let StudyMind turn them into
-          summaries, cited answers, quizzes, flashcards, and mind maps — then
+          summaries, cited answers, quizzes, flashcards, and mind maps - then
           keep you on track with planning and progress insights.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -206,7 +206,7 @@ export default function LandingPage() {
             Ready to turn your notes into knowledge?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-pretty">
-            Start with your first document — it only takes a minute.
+            Start with your first document - it only takes a minute.
           </p>
           <div className="mt-8">
             <Button size="lg" render={<Link href="/dashboard" />}>

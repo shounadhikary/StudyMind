@@ -52,7 +52,7 @@ export function SummarySection({
       <EmptyState
         icon={Sparkles}
         title="No summary yet"
-        description="Generate a structured AI summary — a TL;DR, key points, and a section-by-section breakdown."
+        description="Generate a structured AI summary - a TL;DR, key points, and a section-by-section breakdown."
         action={
           <Button onClick={handleGenerate}>
             <Sparkles className="size-4" />

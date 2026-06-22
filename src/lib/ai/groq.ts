@@ -11,7 +11,7 @@ import {
   type TextProvider,
 } from "./types";
 
-// Llama 3.3 70B on Groq: very fast inference — our primary for real-time chat
+// Llama 3.3 70B on Groq: very fast inference - our primary for real-time chat
 // and a capable fallback for generation.
 const GROQ_MODEL = "llama-3.3-70b-versatile";
 

@@ -210,7 +210,7 @@ export function UploadDialog({
                 <Input
                   id="text-title"
                   name="title"
-                  placeholder="e.g. Lecture 3 — Thermodynamics"
+                  placeholder="e.g. Lecture 3 - Thermodynamics"
                 />
               </div>
               <div className="space-y-1.5">

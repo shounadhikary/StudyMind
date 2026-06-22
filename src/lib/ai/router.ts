@@ -34,7 +34,7 @@ export async function generate(
 }
 
 /**
- * Streamed chat. Groq is primary (fastest), Gemini is the fallback — but only
+ * Streamed chat. Groq is primary (fastest), Gemini is the fallback - but only
  * if the Groq stream fails before emitting anything, to avoid duplicate output.
  */
 export async function* chatStream(

@@ -1,4 +1,4 @@
-/** Shared settings types — safe to import from client and server. */
+/** Shared settings types - safe to import from client and server. */
 
 export type AiProviderPref = "auto" | "gemini" | "groq";
 export type DifficultyPref = "EASY" | "MEDIUM" | "HARD";

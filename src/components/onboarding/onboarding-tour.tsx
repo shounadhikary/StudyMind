@@ -25,7 +25,7 @@ const STEPS = [
   {
     icon: Upload,
     title: "Start with a document",
-    body: "Upload a PDF or paste your notes — we extract the text automatically so the AI can work with it.",
+    body: "Upload a PDF or paste your notes - we extract the text automatically so the AI can work with it.",
   },
   {
     icon: GraduationCap,

@@ -51,7 +51,7 @@ Return ONLY a JSON object of this shape:
     {
       "type": "mcq" | "true_false" | "short_answer",
       "question": "the question text",
-      "options": ["four options — MCQ only"],
+      "options": ["four options - MCQ only"],
       "answer": "the exact correct option, or \\"True\\"/\\"False\\", or a short expected answer",
       "explanation": "a brief explanation of the correct answer"
     }

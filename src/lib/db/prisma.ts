@@ -8,7 +8,7 @@ import { PrismaClient } from "@/generated/prisma/client";
  * A single PrismaClient instance, reused across hot reloads in development so
  * we don't exhaust database connections. Import this everywhere server-side.
  *
- * Prisma 7 connects through a driver adapter — here `@prisma/adapter-pg`, which
+ * Prisma 7 connects through a driver adapter - here `@prisma/adapter-pg`, which
  * talks to Supabase/Postgres using the DATABASE_URL connection string.
  */
 const globalForPrisma = globalThis as unknown as {

@@ -123,7 +123,7 @@ export function DocumentToolbar({
             <AlertDialogTitle>Delete this document?</AlertDialogTitle>
             <AlertDialogDescription>
               This permanently removes the document and everything generated from
-              it — summaries, quizzes, flashcards, and chat history. This
+              it - summaries, quizzes, flashcards, and chat history. This
               can&apos;t be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -26,7 +26,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "StudyMind — AI-powered study companion",
+    default: "StudyMind - AI-powered study companion",
     template: "%s · StudyMind",
   },
   description:

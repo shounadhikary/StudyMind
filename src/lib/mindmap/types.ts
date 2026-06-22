@@ -1,4 +1,4 @@
-/** Shared mind map types — safe to import from client and server. */
+/** Shared mind map types - safe to import from client and server. */
 
 export interface MindMapBranch {
   label: string;

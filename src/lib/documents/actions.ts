@@ -73,7 +73,7 @@ export async function createDocumentFromPdf(
   } catch {
     return {
       ok: false,
-      error: "Couldn't read that PDF — it may be corrupted.",
+      error: "Couldn't read that PDF - it may be corrupted.",
     };
   }
   if (!extracted.fullText) {
@@ -97,7 +97,7 @@ export async function createDocumentFromPdf(
     },
   });
 
-  // Persist the original file (non-fatal if storage fails — text is saved).
+  // Persist the original file (non-fatal if storage fails - text is saved).
   try {
     const path = await uploadPdf(userId, doc.id, bytes);
     await prisma.document.update({ where: { id: doc.id }, data: { fileUrl: path } });
@@ -193,7 +193,7 @@ export async function generateSummary(
   return { ok: true, documentId };
 }
 
-/** (Re)build the RAG index for a document — used to make it chat-ready. */
+/** (Re)build the RAG index for a document - used to make it chat-ready. */
 export async function reindexDocument(
   documentId: string,
 ): Promise<ActionResult> {

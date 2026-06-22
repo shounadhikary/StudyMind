@@ -65,7 +65,7 @@ export function ShareButton({
         <DialogHeader>
           <DialogTitle className="font-heading">Share (read-only)</DialogTitle>
           <DialogDescription>
-            Anyone with this link can view it — no account needed.
+            Anyone with this link can view it - no account needed.
           </DialogDescription>
         </DialogHeader>
         {pending || !url ? (

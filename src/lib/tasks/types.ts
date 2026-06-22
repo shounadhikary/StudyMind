@@ -1,4 +1,4 @@
-/** Shared task types — safe to import from client and server. */
+/** Shared task types - safe to import from client and server. */
 
 export type TaskPriority = "LOW" | "MEDIUM" | "HIGH";
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";

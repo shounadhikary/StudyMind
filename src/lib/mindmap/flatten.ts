@@ -8,7 +8,7 @@ import type {
 
 /**
  * Flatten a mind map tree into nodes + edges with stable ids and depth.
- * Pure — used both to render and (in tests) to validate structure.
+ * Pure - used both to render and (in tests) to validate structure.
  */
 export function flattenMindMap(tree: MindMapTree): FlatGraph {
   const nodes: FlatNode[] = [];

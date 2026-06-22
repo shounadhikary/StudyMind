@@ -68,7 +68,7 @@ export default async function ProgressPage() {
     { label: "Quizzes taken", value: `${overview.quizzesTaken}`, icon: ListChecks },
     {
       label: "Avg accuracy",
-      value: overview.averageAccuracy != null ? `${overview.averageAccuracy}%` : "—",
+      value: overview.averageAccuracy != null ? `${overview.averageAccuracy}%` : "-",
       icon: Target,
     },
     { label: "Cards reviewed", value: `${overview.cardsReviewed}`, icon: Layers },
@@ -86,7 +86,7 @@ export default async function ProgressPage() {
         <EmptyState
           icon={TrendingUp}
           title="No activity yet"
-          description="Run a Pomodoro session, take a quiz, or review some flashcards — your stats and charts will appear here."
+          description="Run a Pomodoro session, take a quiz, or review some flashcards - your stats and charts will appear here."
         />
       ) : (
         <>
@@ -197,7 +197,7 @@ export default async function ProgressPage() {
                   Focus areas
                 </CardTitle>
                 <CardDescription>
-                  Documents with your lowest quiz accuracy — worth another look.
+                  Documents with your lowest quiz accuracy - worth another look.
                 </CardDescription>
               </CardHeader>
               <CardContent>

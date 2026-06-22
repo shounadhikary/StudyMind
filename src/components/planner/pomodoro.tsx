@@ -71,12 +71,12 @@ export function Pomodoro() {
       });
       setMode("break");
       setSecondsLeft(breakSeconds);
-      toast.success("Focus session complete — take a break!");
+      toast.success("Focus session complete - take a break!");
       notify("Focus session complete", "Time for a break.");
     } else {
       setMode("focus");
       setSecondsLeft(focusSeconds);
-      toast("Break over — back to it.");
+      toast("Break over - back to it.");
       notify("Break over", "Time to focus.");
     }
   }, [focusSeconds, breakSeconds]);

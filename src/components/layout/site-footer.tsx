@@ -98,7 +98,7 @@ export function SiteFooter() {
               </a>
             </div>
 
-            {/* App store badges — honestly marked Coming Soon */}
+            {/* App store badges - honestly marked Coming Soon */}
             <div className="flex flex-col gap-2 pt-2">
               {STORE_BADGES.map((store) => (
                 <div

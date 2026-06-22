@@ -11,7 +11,7 @@ export interface ExtractedPdf {
 }
 
 /**
- * Extract text from a PDF (server-side) using unpdf — serverless-friendly,
+ * Extract text from a PDF (server-side) using unpdf - serverless-friendly,
  * no native deps. Returns merged text plus per-page text for RAG page tracking.
  */
 export async function extractPdf(bytes: Uint8Array): Promise<ExtractedPdf> {

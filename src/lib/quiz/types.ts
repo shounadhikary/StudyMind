@@ -1,4 +1,4 @@
-/** Shared quiz types — safe to import from client and server. */
+/** Shared quiz types - safe to import from client and server. */
 
 export type Difficulty = "EASY" | "MEDIUM" | "HARD";
 

@@ -6,7 +6,7 @@
 
 /*
   StudyMind design tokens.
-  Vibe: Notion-meets-Linear — neutral grays + a single calm indigo accent.
+  Vibe: Notion-meets-Linear - neutral grays + a single calm indigo accent.
   Light: white / very-light-gray surfaces, dark gray text.
   Dark: near-black (#0c0c0c) surfaces, light gray text, subtle borders.
   Fonts: Inter (UI/body), Lora (serif headings), Geist Mono (code).
@@ -62,7 +62,7 @@
 :root {
   --radius: 0.625rem;
 
-  /* Light mode — white & very-light-gray surfaces, dark gray text */
+  /* Light mode - white & very-light-gray surfaces, dark gray text */
   --background: oklch(1 0 0);
   --foreground: oklch(0.21 0 0);
   --card: oklch(1 0 0);
@@ -70,7 +70,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0 0);
 
-  /* Accent — calm indigo, used sparingly (primary buttons, links, active) */
+  /* Accent - calm indigo, used sparingly (primary buttons, links, active) */
   --primary: oklch(0.515 0.21 269);
   --primary-foreground: oklch(0.985 0 0);
 
@@ -87,7 +87,7 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.515 0.21 269);
 
-  /* Chart palette — indigo, emerald, amber, rose, violet */
+  /* Chart palette - indigo, emerald, amber, rose, violet */
   --chart-1: oklch(0.55 0.2 269);
   --chart-2: oklch(0.65 0.15 162);
   --chart-3: oklch(0.72 0.16 70);
@@ -105,7 +105,7 @@
 }
 
 .dark {
-  /* Dark mode — near-black surfaces, light gray text, subtle borders */
+  /* Dark mode - near-black surfaces, light gray text, subtle borders */
   --background: oklch(0.13 0 0);
   --foreground: oklch(0.97 0 0);
   --card: oklch(0.165 0 0);
@@ -113,7 +113,7 @@
   --popover: oklch(0.165 0 0);
   --popover-foreground: oklch(0.97 0 0);
 
-  /* Accent — slightly brighter indigo for contrast on dark surfaces */
+  /* Accent - slightly brighter indigo for contrast on dark surfaces */
   --primary: oklch(0.62 0.2 269);
   --primary-foreground: oklch(0.985 0 0);
 

@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 const SECTIONS = [
   {
     heading: "What we store",
-    body: "When you sign in, we store your account details (name, email, avatar) and the study materials you upload — documents, generated summaries, quizzes, flashcards, and your study activity. This is what powers your personalized study experience.",
+    body: "When you sign in, we store your account details (name, email, avatar) and the study materials you upload - documents, generated summaries, quizzes, flashcards, and your study activity. This is what powers your personalized study experience.",
   },
   {
     heading: "How your documents are used",
-    body: "Your uploaded documents are processed to extract text, create embeddings for search, and generate study material. This processing happens through AI providers (Google Gemini and Groq). Your content is used to serve your requests — it is not sold.",
+    body: "Your uploaded documents are processed to extract text, create embeddings for search, and generate study material. This processing happens through AI providers (Google Gemini and Groq). Your content is used to serve your requests - it is not sold.",
   },
   {
     heading: "Third-party services",

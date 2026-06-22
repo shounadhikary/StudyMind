@@ -26,7 +26,7 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 const STATS = [
   { label: "Study time", value: "0h", icon: Clock },
-  { label: "Quiz accuracy", value: "—", icon: Target },
+  { label: "Quiz accuracy", value: "-", icon: Target },
   { label: "Cards reviewed", value: "0", icon: Layers },
   { label: "Day streak", value: "0", icon: Flame },
 ];
@@ -102,7 +102,7 @@ export default function DashboardPage() {
             </h3>
             <p className="mx-auto max-w-md text-sm text-muted-foreground text-pretty">
               Drop in a PDF or paste your notes and StudyMind will generate
-              summaries, quizzes, flashcards, and more — all in one place.
+              summaries, quizzes, flashcards, and more - all in one place.
             </p>
           </div>
           <Button render={<Link href="/documents" />}>

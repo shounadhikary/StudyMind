@@ -24,7 +24,7 @@ function isCorrect(question: QuizQuestion, userAnswer: string): boolean {
   return user === correct;
 }
 
-/** Grade a quiz attempt. Pure — no I/O. */
+/** Grade a quiz attempt. Pure - no I/O. */
 export function gradeQuiz(
   questions: QuizQuestion[],
   answers: QuizAnswers,

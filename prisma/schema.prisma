@@ -117,7 +117,7 @@ model DocumentChunk {
   content    String
   pageNumber Int?     @map("page_number")
   // pgvector column (Gemini text-embedding-004 = 768 dims). Typed as Unsupported
-  // because Prisma has no native vector type — written/queried via raw SQL.
+  // because Prisma has no native vector type - written/queried via raw SQL.
   // Requires the `vector` extension enabled in Supabase, plus an ANN index
   // (ivfflat/hnsw) added in a manual migration.
   embedding  Unsupported("vector(768)")?

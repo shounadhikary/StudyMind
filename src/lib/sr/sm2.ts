@@ -1,5 +1,5 @@
 /**
- * SM-2 (Anki-style) spaced-repetition scheduling. Pure functions — no I/O.
+ * SM-2 (Anki-style) spaced-repetition scheduling. Pure functions - no I/O.
  *
  * Each card tracks an ease factor, the current interval (days), how many times
  * it's been recalled in a row (repetitions), and lapse count. After a review the

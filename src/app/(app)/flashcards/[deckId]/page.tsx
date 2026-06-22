@@ -45,7 +45,7 @@ export default async function DeckStudyPage({
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {allCaughtUp
-                ? `All caught up — reviewing all ${data.total} cards`
+                ? `All caught up - reviewing all ${data.total} cards`
                 : `${data.dueCards.length} due · ${data.total} total`}
             </p>
           </div>

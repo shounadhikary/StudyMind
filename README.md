@@ -4,7 +4,7 @@
 
 Upload your study materials (PDFs or notes) and StudyMind turns them into
 **summaries**, **cited answers** (RAG chat), **quizzes**, **spaced-repetition
-flashcards**, and **mind maps** — then keeps you on track with a **planner**,
+flashcards**, and **mind maps** - then keeps you on track with a **planner**,
 **Pomodoro**, **goals/streaks**, and a **progress dashboard**.
 
 Built as a full-stack + AI engineering portfolio project.
@@ -41,15 +41,15 @@ in the planner, mind-map image export, and native mobile apps.
 
 ### Multi-provider AI architecture with automatic fallback
 
-A small, provider-agnostic interface (`src/lib/ai`) — `generate`, `generateJSON`,
-`chatStream`, `embed` — sits in front of swappable providers, with a router that
+A small, provider-agnostic interface (`src/lib/ai`) - `generate`, `generateJSON`,
+`chatStream`, `embed` - sits in front of swappable providers, with a router that
 **falls back automatically** on rate-limit/transient errors:
 
 | Operation | Primary | Fallback |
 | --------- | ------- | -------- |
 | `generate` / `generateJSON` | Gemini | Groq |
 | `chatStream` | Groq (fast) | Gemini (only if nothing emitted yet) |
-| `embed` | Gemini | — |
+| `embed` | Gemini | - |
 
 This keeps the app working even when one provider is unavailable, and isolates
 provider details from every feature. `generateJSON` enforces strict JSON for
@@ -90,7 +90,7 @@ flowchart LR
 ```
 
 - **Next.js 16 App Router** (React 19, Server Components + Server Actions).
-- All AI/secret calls run **server-side only** — keys never reach the client.
+- All AI/secret calls run **server-side only** - keys never reach the client.
 - **Clerk** handles auth; route protection lives in `src/proxy.ts` (Next 16
   renamed Middleware → Proxy).
 - **Prisma 7** with the `@prisma/adapter-pg` driver adapter talks to **Supabase
@@ -122,11 +122,11 @@ npm run dev                 # http://localhost:3000
 
 See [`.env.example`](./.env.example). You'll need:
 
-- **Clerk** — `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
+- **Clerk** - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
   (enable Google + GitHub in the Clerk dashboard).
-- **AI** — `GEMINI_API_KEY` ([aistudio.google.com](https://aistudio.google.com/apikey)),
+- **AI** - `GEMINI_API_KEY` ([aistudio.google.com](https://aistudio.google.com/apikey)),
   `GROQ_API_KEY` ([console.groq.com](https://console.groq.com/keys)).
-- **Supabase** — `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+- **Supabase** - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
   `SUPABASE_SERVICE_ROLE_KEY`, plus `DATABASE_URL` (transaction pooler) and
   `DIRECT_URL` (session pooler, for migrations). Enable the `vector` extension.
 

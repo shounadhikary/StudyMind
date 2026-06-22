@@ -74,7 +74,7 @@ export const APP_NAV: NavItem[] = [
     title: "Leaderboard",
     href: "/leaderboard",
     icon: Trophy,
-    description: "Opt-in study rankings — XP from quizzes, reviews, and streaks.",
+    description: "Opt-in study rankings - XP from quizzes, reviews, and streaks.",
   },
 ];
 
