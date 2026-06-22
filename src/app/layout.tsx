@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Lora, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkThemeProvider } from "@/components/clerk-theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({
@@ -60,7 +61,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>{children}</TooltipProvider>
+          <ClerkThemeProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ClerkThemeProvider>
         </ThemeProvider>
       </body>
     </html>

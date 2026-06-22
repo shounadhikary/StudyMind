@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { HeaderAuth } from "@/components/layout/header-auth";
 
 const NAV_LINKS = [
   { label: "Features", href: "/#features" },
@@ -37,13 +37,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
-          {/* TODO(phase-1 auth): replace with Clerk sign-in/up routes. */}
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" render={<Link href="/dashboard" />}>
-            Sign in
-          </Button>
-          <Button size="sm" render={<Link href="/dashboard" />}>
-            Get started
-          </Button>
+          <HeaderAuth />
         </div>
       </div>
     </header>
