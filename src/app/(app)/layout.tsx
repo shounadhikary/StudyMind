@@ -6,6 +6,9 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppTopbar } from "@/components/layout/app-topbar";
 import { syncUser } from "@/lib/auth/sync-user";
 
+// All app routes require auth (and read headers via Clerk), so they're dynamic.
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
 }: {
