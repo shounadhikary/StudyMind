@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkThemeProvider } from "@/components/clerk-theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -64,6 +65,7 @@ export default function RootLayout({
           <ClerkThemeProvider>
             <TooltipProvider>{children}</TooltipProvider>
           </ClerkThemeProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
