@@ -11,6 +11,7 @@ const isProtectedRoute = createRouteMatcher([
   "/mind-maps(.*)",
   "/planner(.*)",
   "/progress(.*)",
+  "/leaderboard(.*)",
   "/settings(.*)",
   "/profile(.*)",
 ]);

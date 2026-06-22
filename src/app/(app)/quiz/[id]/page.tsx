@@ -7,6 +7,8 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuizRunner } from "@/components/quiz/quiz-runner";
+import { ExportMenu } from "@/components/export/export-menu";
+import { ShareButton } from "@/components/share/share-button";
 import { getQuiz } from "@/lib/quiz/queries";
 import { DIFFICULTY_LABELS, type QuizQuestion } from "@/lib/quiz/types";
 
@@ -40,18 +42,28 @@ export default async function QuizDetailPage({
           <ArrowLeft className="size-4" />
           {quiz.document.title}
         </Button>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-heading text-xl font-semibold tracking-tight">
-            Quiz · {questions.length} questions
-          </h1>
-          <Badge variant="secondary">
-            {DIFFICULTY_LABELS[quiz.difficulty]}
-          </Badge>
-          {Number.isFinite(best) ? (
-            <span className="text-sm text-muted-foreground">
-              Best score {best}%
-            </span>
-          ) : null}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-heading text-xl font-semibold tracking-tight">
+              Quiz · {questions.length} questions
+            </h1>
+            <Badge variant="secondary">
+              {DIFFICULTY_LABELS[quiz.difficulty]}
+            </Badge>
+            {Number.isFinite(best) ? (
+              <span className="text-sm text-muted-foreground">
+                Best score {best}%
+              </span>
+            ) : null}
+          </div>
+          <div className="flex items-center gap-2">
+            <ExportMenu
+              kind="quiz"
+              title={quiz.document.title}
+              questions={questions}
+            />
+            <ShareButton resourceType="QUIZ" resourceId={quiz.id} />
+          </div>
         </div>
       </div>
 

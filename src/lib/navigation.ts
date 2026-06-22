@@ -7,6 +7,7 @@ import {
   Network,
   CalendarDays,
   TrendingUp,
+  Trophy,
   Settings,
   type LucideIcon,
 } from "lucide-react";
@@ -68,6 +69,12 @@ export const APP_NAV: NavItem[] = [
     href: "/progress",
     icon: TrendingUp,
     description: "See study time, accuracy trends, and focus areas.",
+  },
+  {
+    title: "Leaderboard",
+    href: "/leaderboard",
+    icon: Trophy,
+    description: "Opt-in study rankings — XP from quizzes, reviews, and streaks.",
   },
 ];
 

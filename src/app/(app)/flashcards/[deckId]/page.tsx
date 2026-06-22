@@ -7,6 +7,8 @@ import { ArrowLeft, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StudyMode } from "@/components/flashcards/study-mode";
+import { ExportMenu } from "@/components/export/export-menu";
+import { ShareButton } from "@/components/share/share-button";
 import { getDeck } from "@/lib/flashcards/queries";
 
 export const metadata: Metadata = { title: "Study" };
@@ -36,14 +38,31 @@ export default async function DeckStudyPage({
           <ArrowLeft className="size-4" />
           Decks
         </Button>
-        <h1 className="font-heading text-xl font-semibold tracking-tight">
-          {data.deck.title}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {allCaughtUp
-            ? `All caught up — reviewing all ${data.total} cards`
-            : `${data.dueCards.length} due · ${data.total} total`}
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="font-heading text-xl font-semibold tracking-tight">
+              {data.deck.title}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {allCaughtUp
+                ? `All caught up — reviewing all ${data.total} cards`
+                : `${data.dueCards.length} due · ${data.total} total`}
+            </p>
+          </div>
+          {data.total > 0 ? (
+            <div className="flex shrink-0 items-center gap-2">
+              <ExportMenu
+                kind="deck"
+                title={data.deck.title}
+                cards={data.allCards}
+              />
+              <ShareButton
+                resourceType="FLASHCARD_DECK"
+                resourceId={data.deck.id}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {data.total === 0 ? (

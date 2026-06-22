@@ -38,40 +38,35 @@ export async function listDecks(userId: string, documentId: string) {
 
 export type DeckListItem = Awaited<ReturnType<typeof listDecks>>[number];
 
-/** A deck (scoped to owner) with its due cards for a study session. */
+/** A deck (scoped to owner) with all its cards + the due subset for studying. */
 export async function getDeck(id: string, userId: string) {
   const deck = await prisma.flashcardDeck.findFirst({
     where: { id, userId },
-    select: {
-      id: true,
-      title: true,
-      documentId: true,
-      _count: { select: { flashcards: true } },
-    },
+    select: { id: true, title: true, documentId: true },
   });
   if (!deck) return null;
 
-  const dueCards = await prisma.flashcard.findMany({
-    where: { deckId: id, dueDate: { lte: new Date() } },
-    orderBy: { dueDate: "asc" },
-    take: 100,
-    select: { id: true, front: true, back: true },
+  const cards = await prisma.flashcard.findMany({
+    where: { deckId: id },
+    orderBy: { createdAt: "asc" },
+    take: 300,
+    select: { id: true, front: true, back: true, dueDate: true },
   });
 
-  // Fallback for a fresh review when nothing is due: study the whole deck.
-  const allCards =
-    dueCards.length === 0
-      ? await prisma.flashcard.findMany({
-          where: { deckId: id },
-          orderBy: { createdAt: "asc" },
-          take: 100,
-          select: { id: true, front: true, back: true },
-        })
-      : [];
+  const now = Date.now();
+  const strip = (c: (typeof cards)[number]) => ({
+    id: c.id,
+    front: c.front,
+    back: c.back,
+  });
+  const dueCards = cards
+    .filter((c) => c.dueDate && c.dueDate.getTime() <= now)
+    .map(strip);
+  const allCards = cards.map(strip);
 
   return {
     deck: { id: deck.id, title: deck.title, documentId: deck.documentId },
-    total: deck._count.flashcards,
+    total: cards.length,
     dueCards,
     allCards,
   };

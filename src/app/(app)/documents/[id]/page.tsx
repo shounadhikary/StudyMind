@@ -10,6 +10,7 @@ import { getDocument } from "@/lib/documents/queries";
 import { SummarySection } from "@/components/documents/summary-section";
 import { DocumentToolbar } from "@/components/documents/document-toolbar";
 import { ExtractedText } from "@/components/documents/extracted-text";
+import { ExportMenu } from "@/components/export/export-menu";
 import type { DocumentSummary } from "@/lib/documents/types";
 
 export const metadata: Metadata = { title: "Document" };
@@ -64,7 +65,15 @@ export default async function DocumentDetailPage({
               <span className="uppercase">{doc.language}</span>
             </div>
           </div>
-          <DocumentToolbar id={doc.id} title={doc.title} />
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportMenu
+              kind="document"
+              title={doc.title}
+              summary={summary}
+              rawText={doc.rawText ?? ""}
+            />
+            <DocumentToolbar id={doc.id} title={doc.title} />
+          </div>
         </div>
       </div>
 
