@@ -8,12 +8,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  // Runtime connects via the @prisma/adapter-pg driver adapter (see
-  // src/lib/db/prisma.ts). These URLs are used by the Prisma CLI:
-  // url = transaction pooler (6543); directUrl = session pooler (5432) for migrations.
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  // Runtime connects via the @prisma/adapter-pg driver adapter
+  // (src/lib/db/prisma.ts). The CLI's connection URL lives in prisma.config.ts.
+  provider = "postgresql"
 }
 
 // ---------------------------------------------------------------------------
@@ -79,11 +76,12 @@ model User {
   quizAttempts   QuizAttempt[]
   flashcardDecks FlashcardDeck[]
   mindMaps       MindMap[]
-  tasks          Task[]
-  focusSessions  FocusSession[]
-  goals          Goal[]
-  achievements   Achievement[]
-  streak         Streak?
+  tasks            Task[]
+  focusSessions    FocusSession[]
+  goals            Goal[]
+  achievements     Achievement[]
+  flashcardReviews FlashcardReview[]
+  streak           Streak?
 
   @@map("users")
 }
@@ -243,6 +241,19 @@ model Flashcard {
   @@index([deckId])
   @@index([dueDate])
   @@map("flashcards")
+}
+
+model FlashcardReview {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  cardId     String?  @map("card_id")
+  rating     String
+  reviewedAt DateTime @default(now()) @map("reviewed_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, reviewedAt])
+  @@map("flashcard_reviews")
 }
 
 model MindMap {

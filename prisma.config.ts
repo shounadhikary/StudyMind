@@ -10,4 +10,9 @@ export default defineConfig({
   migrations: {
     path: "prisma/migrations",
   },
+  datasource: {
+    // The Prisma CLI (migrate/diff) connects over the session pooler
+    // (DIRECT_URL); the transaction pooler can't run DDL. Falls back to DATABASE_URL.
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
+  },
 });

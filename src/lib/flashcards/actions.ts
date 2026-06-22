@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db/prisma";
 import type { Prisma } from "@/generated/prisma/client";
 import { requireUserId } from "@/lib/auth/require-user";
+import { recordActivity } from "@/lib/productivity/streak";
 import { generateFlashcards } from "./generate";
 import { INITIAL_SR_STATE, review, type Rating, type SrState } from "@/lib/sr/sm2";
 
@@ -83,6 +84,11 @@ export async function reviewCard(
       dueDate,
     },
   });
+  // Log the review (for analytics) and count studying toward the streak.
+  await prisma.flashcardReview.create({
+    data: { userId, cardId: card.id, rating },
+  });
+  await recordActivity(userId);
   return { ok: true };
 }
 
