@@ -10,6 +10,7 @@ import { syncUser } from "@/lib/auth/sync-user";
 import { extractPdf } from "./pdf";
 import { uploadPdf, deleteFile } from "./storage";
 import { summarizeText } from "./summary";
+import { indexDocument } from "@/lib/rag/index-document";
 
 const MAX_PDF_BYTES = 25 * 1024 * 1024;
 
@@ -38,6 +39,14 @@ export async function createDocumentFromText(
   const doc = await prisma.document.create({
     data: { userId, title, rawText: text },
   });
+
+  // Best-effort RAG indexing so the document is chat-ready (non-fatal).
+  try {
+    await indexDocument(doc.id, { rawText: text });
+  } catch (error) {
+    console.error("[documents] indexing failed:", error);
+  }
+
   revalidatePath("/documents");
   return { ok: true, documentId: doc.id };
 }
@@ -94,6 +103,16 @@ export async function createDocumentFromPdf(
     await prisma.document.update({ where: { id: doc.id }, data: { fileUrl: path } });
   } catch (error) {
     console.error("[documents] PDF storage upload failed:", error);
+  }
+
+  // Best-effort RAG indexing with page tracking (non-fatal).
+  try {
+    await indexDocument(doc.id, {
+      rawText: extracted.fullText,
+      pages: extracted.pages,
+    });
+  } catch (error) {
+    console.error("[documents] indexing failed:", error);
   }
 
   revalidatePath("/documents");
@@ -171,5 +190,33 @@ export async function generateSummary(
     },
   });
   revalidatePath(`/documents/${documentId}`);
+  return { ok: true, documentId };
+}
+
+/** (Re)build the RAG index for a document — used to make it chat-ready. */
+export async function reindexDocument(
+  documentId: string,
+): Promise<ActionResult> {
+  const userId = await requireUser();
+  const doc = await prisma.document.findFirst({
+    where: { id: documentId, userId },
+    select: { id: true, rawText: true },
+  });
+  if (!doc?.rawText) {
+    return { ok: false, error: "This document has no text to index." };
+  }
+
+  try {
+    const count = await indexDocument(doc.id, { rawText: doc.rawText });
+    if (count === 0) return { ok: false, error: "No content to index." };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Indexing failed.",
+    };
+  }
+
+  revalidatePath("/documents");
+  revalidatePath("/chat");
   return { ok: true, documentId };
 }
