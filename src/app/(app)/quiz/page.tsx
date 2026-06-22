@@ -14,6 +14,7 @@ import { UploadDialog } from "@/components/documents/upload-dialog";
 import { QuizGenerator } from "@/components/quiz/quiz-generator";
 import { listQuizzes } from "@/lib/quiz/queries";
 import { listChatableDocuments } from "@/lib/chat/queries";
+import { getPreferences } from "@/lib/settings/preferences";
 import { DIFFICULTY_LABELS } from "@/lib/quiz/types";
 
 export const metadata: Metadata = { title: "Quiz" };
@@ -43,7 +44,10 @@ export default async function QuizPage({
       );
     }
 
-    const quizzes = await listQuizzes(userId, doc);
+    const [quizzes, prefs] = await Promise.all([
+      listQuizzes(userId, doc),
+      getPreferences(userId),
+    ]);
 
     return (
       <div className="space-y-6">
@@ -63,7 +67,10 @@ export default async function QuizPage({
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-          <QuizGenerator documentId={doc} />
+          <QuizGenerator
+            documentId={doc}
+            initialDifficulty={prefs.defaultDifficulty}
+          />
 
           <div className="space-y-3">
             <h2 className="text-sm font-medium text-muted-foreground">

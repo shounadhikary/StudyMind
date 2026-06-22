@@ -14,9 +14,16 @@ import { DIFFICULTY_LABELS, type Difficulty } from "@/lib/quiz/types";
 const DIFFICULTIES: Difficulty[] = ["EASY", "MEDIUM", "HARD"];
 const COUNTS = [5, 10, 15];
 
-export function QuizGenerator({ documentId }: { documentId: string }) {
+export function QuizGenerator({
+  documentId,
+  initialDifficulty = "MEDIUM",
+}: {
+  documentId: string;
+  initialDifficulty?: Difficulty;
+}) {
   const router = useRouter();
-  const [difficulty, setDifficulty] = React.useState<Difficulty>("MEDIUM");
+  const [difficulty, setDifficulty] =
+    React.useState<Difficulty>(initialDifficulty);
   const [count, setCount] = React.useState(5);
   const [pending, startTransition] = React.useTransition();
 

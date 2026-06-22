@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PageHeader } from "@/components/shared/page-header";
+import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -60,6 +61,7 @@ const QUICK_ACTIONS = [
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
+      <OnboardingTour />
       <PageHeader
         title="Welcome to StudyMind"
         description="Here's your study overview. Upload a document to bring it to life."
