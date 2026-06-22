@@ -28,48 +28,37 @@ export async function POST(req: Request) {
   const { userId } = await auth();
   if (!userId) return new Response("Unauthorized", { status: 401 });
 
-  let body: { documentId?: unknown; message?: unknown; chatId?: unknown };
+  let body: { chatId?: unknown; message?: unknown };
   try {
     body = await req.json();
   } catch {
     return new Response("Bad request", { status: 400 });
   }
 
-  const documentId = typeof body.documentId === "string" ? body.documentId : "";
+  const chatId = typeof body.chatId === "string" ? body.chatId : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
-  const chatIdInput = typeof body.chatId === "string" ? body.chatId : undefined;
-  if (!documentId || !message) {
-    return new Response("Missing documentId or message", { status: 400 });
+  if (!chatId || !message) {
+    return new Response("Missing chatId or message", { status: 400 });
   }
 
-  // Verify the document belongs to the user.
-  const document = await prisma.document.findFirst({
-    where: { id: documentId, userId },
-    select: { id: true, title: true },
+  // Verify the chat belongs to the user.
+  const chat = await prisma.chat.findFirst({
+    where: { id: chatId, userId },
+    select: { id: true, documentIds: true },
   });
-  if (!document) return new Response("Document not found", { status: 404 });
+  if (!chat) return new Response("Chat not found", { status: 404 });
 
-  // Resolve or create the chat thread for this document.
-  let chat = chatIdInput
-    ? await prisma.chat.findFirst({ where: { id: chatIdInput, userId } })
-    : await prisma.chat.findFirst({
-        where: { userId, documentIds: { has: documentId } },
-        orderBy: { createdAt: "desc" },
-      });
-  if (!chat) {
-    chat = await prisma.chat.create({
-      data: { userId, documentIds: [documentId], title: document.title },
-    });
-  }
-  const chatId = chat.id;
-
-  // Persist the user's message.
+  // Persist the user's message and bump the chat's updatedAt.
   await prisma.chatMessage.create({
     data: { chatId, role: "USER", content: message },
   });
+  await prisma.chat.update({
+    where: { id: chatId },
+    data: { updatedAt: new Date() },
+  });
 
-  // Retrieve relevant chunks and assemble context + citations.
-  const chunks = await retrieve(message, [documentId], { topK: TOP_K });
+  // Retrieve relevant chunks across all of the chat's documents.
+  const chunks = await retrieve(message, chat.documentIds, { topK: TOP_K });
   const { context, citations } = assembleContext(chunks);
 
   // Conversation = system prompt + recent history (which includes this message).

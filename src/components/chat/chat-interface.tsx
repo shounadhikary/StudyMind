@@ -1,14 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { ArrowUp, Loader2, Sparkles } from "lucide-react";
+import { ArrowUp, FileText, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { EmptyState } from "@/components/shared/empty-state";
-import { reindexDocument } from "@/lib/documents/actions";
 import { cn } from "@/lib/utils";
 import type { Citation } from "@/lib/rag/context";
 
@@ -30,26 +27,23 @@ function decodeCitations(header: string | null): Citation[] {
 }
 
 export function ChatInterface({
-  documentId,
-  indexed,
-  initialChatId,
+  chatId,
   initialMessages,
 }: {
-  documentId: string;
-  indexed: boolean;
-  initialChatId: string | null;
+  chatId: string;
   initialMessages: ChatMessageView[];
 }) {
-  const router = useRouter();
-  const [messages, setMessages] = React.useState<ChatMessageView[]>(initialMessages);
+  const [messages, setMessages] =
+    React.useState<ChatMessageView[]>(initialMessages);
   const [input, setInput] = React.useState("");
   const [streaming, setStreaming] = React.useState(false);
-  const [preparing, setPreparing] = React.useState(false);
-  const chatIdRef = React.useRef<string | null>(initialChatId);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages]);
 
   async function send() {
@@ -57,15 +51,10 @@ export function ChatInterface({
     if (!question || streaming) return;
     setInput("");
 
-    const userMsg: ChatMessageView = {
-      id: `u-${Date.now()}`,
-      role: "user",
-      content: question,
-    };
     const assistantId = `a-${Date.now()}`;
     setMessages((prev) => [
       ...prev,
-      userMsg,
+      { id: `u-${Date.now()}`, role: "user", content: question },
       { id: assistantId, role: "assistant", content: "" },
     ]);
     setStreaming(true);
@@ -74,16 +63,11 @@ export function ChatInterface({
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          documentId,
-          chatId: chatIdRef.current,
-          message: question,
-        }),
+        body: JSON.stringify({ chatId, message: question }),
       });
       if (!res.ok || !res.body) {
         throw new Error(await res.text().catch(() => "Request failed"));
       }
-      chatIdRef.current = res.headers.get("x-chat-id") ?? chatIdRef.current;
       const citations = decodeCitations(res.headers.get("x-citations"));
 
       const reader = res.body.getReader();
@@ -103,47 +87,11 @@ export function ChatInterface({
         ),
       );
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Something went wrong.",
-      );
+      toast.error(error instanceof Error ? error.message : "Something went wrong.");
       setMessages((prev) => prev.filter((m) => m.id !== assistantId));
     } finally {
       setStreaming(false);
     }
-  }
-
-  function prepareDocument() {
-    setPreparing(true);
-    reindexDocument(documentId)
-      .then((result) => {
-        if (result.ok) {
-          toast.success("Document is ready to chat");
-          router.refresh();
-        } else {
-          toast.error(result.error);
-        }
-      })
-      .finally(() => setPreparing(false));
-  }
-
-  if (!indexed) {
-    return (
-      <EmptyState
-        icon={Sparkles}
-        title="Prepare this document for chat"
-        description="We need to index this document (chunk + embed its text) before you can ask questions about it."
-        action={
-          <Button onClick={prepareDocument} disabled={preparing}>
-            {preparing ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Sparkles className="size-4" />
-            )}
-            {preparing ? "Preparing…" : "Prepare for chat"}
-          </Button>
-        }
-      />
-    );
   }
 
   return (
@@ -155,11 +103,11 @@ export function ChatInterface({
               <Sparkles className="size-5" />
             </span>
             <p className="mt-4 font-heading text-lg font-semibold">
-              Ask anything about this document
+              Ask anything about your documents
             </p>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground text-pretty">
-              Answers are grounded in the document text, with citations to the
-              exact sources.
+              Answers are grounded in the selected documents, with citations to
+              the exact sources.
             </p>
           </div>
         ) : (
@@ -205,7 +153,7 @@ function MessageBubble({ message }: { message: ChatMessageView }) {
   const isUser = message.role === "user";
   return (
     <div className={cn("flex", isUser ? "justify-end" : "justify-start")}>
-      <div className={cn("max-w-[85%] space-y-2", isUser && "items-end")}>
+      <div className="max-w-[85%] space-y-2">
         <div
           className={cn(
             "rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap text-pretty",
@@ -237,7 +185,13 @@ function Citations({ citations }: { citations: Citation[] }) {
             className="rounded-lg border bg-background px-3 py-2 text-xs"
           >
             <span className="font-medium text-primary">[{c.ref}]</span>{" "}
-            {c.pageNumber != null ? (
+            {c.documentTitle ? (
+              <span className="inline-flex items-center gap-1 text-muted-foreground">
+                <FileText className="size-3" />
+                {c.documentTitle}
+                {c.pageNumber != null ? `, p.${c.pageNumber}` : ""}
+              </span>
+            ) : c.pageNumber != null ? (
               <span className="text-muted-foreground">page {c.pageNumber}</span>
             ) : null}
             <p className="mt-1 text-muted-foreground text-pretty">{c.snippet}</p>
