@@ -136,7 +136,6 @@ export default function LandingPage() {
         <p className="mt-4 text-xs text-muted-foreground">
           No credit card required · Powered by Gemini &amp; Groq
         </p>
-        <StoreBadges className="mt-8 justify-center" />
       </section>
 
       {/* Features */}
@@ -216,6 +215,7 @@ export default function LandingPage() {
               <ArrowRight className="size-4" />
             </Button>
           </div>
+          <StoreBadges className="mt-8 justify-center" />
         </div>
       </section>
     </>
