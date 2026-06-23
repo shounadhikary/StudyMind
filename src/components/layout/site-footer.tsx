@@ -3,6 +3,7 @@ import { ShieldCheck, Sparkles, Brain, GraduationCap } from "lucide-react";
 
 import { GitHubIcon, LinkedInIcon } from "@/components/shared/brand-icons";
 import { BrandIcon } from "@/components/shared/brand-mark";
+import { StoreBadges } from "@/components/marketing/store-badges";
 
 const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Secure & Private" },
@@ -10,8 +11,6 @@ const TRUST_ITEMS = [
   { icon: Brain, label: "Smart Learning" },
   { icon: GraduationCap, label: "Built for students" },
 ];
-
-const STORE_BADGES = ["Google Play", "App Store", "Microsoft Store"];
 
 const LINK_COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   [
@@ -97,20 +96,8 @@ export function SiteFooter() {
               </a>
             </div>
 
-            {/* App store badges - honestly marked Coming Soon */}
-            <div className="flex flex-col gap-2 pt-2">
-              {STORE_BADGES.map((store) => (
-                <div
-                  key={store}
-                  className="flex items-center justify-between rounded-lg border bg-background px-3 py-2"
-                >
-                  <span className="text-xs font-medium">{store}</span>
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    Coming Soon
-                  </span>
-                </div>
-              ))}
-            </div>
+            {/* App store badges (placeholder links until listings are live) */}
+            <StoreBadges className="pt-2" />
           </div>
 
           {/* Link columns */}
