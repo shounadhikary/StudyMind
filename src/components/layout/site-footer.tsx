@@ -3,7 +3,6 @@ import { ShieldCheck, Sparkles, Brain, GraduationCap } from "lucide-react";
 
 import { GitHubIcon, LinkedInIcon } from "@/components/shared/brand-icons";
 import { BrandIcon } from "@/components/shared/brand-mark";
-import { StoreBadges } from "@/components/marketing/store-badges";
 
 const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Secure & Private" },
@@ -95,9 +94,6 @@ export function SiteFooter() {
                 <LinkedInIcon className="size-4" />
               </a>
             </div>
-
-            {/* App store badges (placeholder links until listings are live) */}
-            <StoreBadges className="pt-2" />
           </div>
 
           {/* Link columns */}
