@@ -2,7 +2,7 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/theme-provider";
 
 /**
  * Wraps Clerk's provider so its prebuilt UI (sign-in/up, user button) follows

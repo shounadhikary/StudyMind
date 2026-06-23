@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/theme-provider";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { toast } from "sonner";
 

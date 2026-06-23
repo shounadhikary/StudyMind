@@ -51,6 +51,17 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
+        {/*
+          No-flash theme script. Rendered by this *server* layout (not a client
+          component), so it lands in the initial HTML and runs before paint,
+          without React's "script inside a component" client-render warning.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var e=document.documentElement,t=localStorage.getItem('theme'),d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);e.classList.toggle('dark',d);e.style.colorScheme=d?'dark':'light';}catch(e){}})();",
+          }}
+        />
         <SiteBackground />
         <ThemeProvider
           attribute="class"
