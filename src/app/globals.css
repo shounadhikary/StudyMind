@@ -159,3 +159,21 @@
     text-rendering: optimizeLegibility;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Decorative science-doodle background, framing the whole app.
+   Dark mode uses the chalkboard artwork; light mode uses an inverted
+   "whiteboard" variant (dark doodles on light paper). Fixed so it stays put
+   while content scrolls; opaque surfaces (cards, sidebar, header) sit on top.
+   --------------------------------------------------------------------------- */
+body {
+  background-image: url("/study-bg-light.jpg");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dark body {
+  background-image: url("/study-bg-dark.jpg");
+}

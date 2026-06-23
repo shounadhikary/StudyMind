@@ -28,7 +28,7 @@ export default async function AppLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="bg-transparent">
         <AppTopbar />
         <div className="flex flex-1 flex-col">
           <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
