@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkThemeProvider } from "@/components/clerk-theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { SiteBackground } from "@/components/shared/site-background";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({
       className={`${inter.variable} ${lora.variable} ${geistMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
+        <SiteBackground />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

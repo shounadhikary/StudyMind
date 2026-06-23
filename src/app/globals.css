@@ -171,33 +171,54 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Decorative science-doodle background, framing the whole app.
-   Dark mode uses the chalkboard artwork; light mode uses an inverted
-   "whiteboard" variant (dark doodles on light paper). Fixed so it stays put
-   while content scrolls; opaque surfaces (cards, sidebar, header) sit on top.
+   Moveable, layered background (driven by <SiteBackground/>).
+   The component sets --px / --py (-1..1) from the pointer; CSS eases the
+   transform, so the layers glide. Two depths create parallax: a far doodle
+   frame and a nearer aurora that also auto-drifts. GPU-composited; opaque
+   surfaces (cards, sidebar, header) sit on top.
    --------------------------------------------------------------------------- */
-body {
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  --px: 0;
+  --py: 0;
+}
+
+.site-bg__doodle,
+.site-bg__aurora-wrap {
+  position: absolute;
+  inset: -12%;
+}
+
+/* Far layer: the science-doodle frame. Moves opposite the pointer (slow). */
+.site-bg__doodle {
   background-image: url("/study-bg-light.jpg");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  transform: translate3d(calc(var(--px) * -18px), calc(var(--py) * -18px), 0)
+    scale(1.12);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
-.dark body {
+.dark .site-bg__doodle {
   background-image: url("/study-bg-dark.jpg");
 }
 
-/* ---------------------------------------------------------------------------
-   Aurora: slow-drifting light blooms that glow over the doodle frame.
-   Pure CSS, GPU-composited (transform only). Sits behind all content.
-   --------------------------------------------------------------------------- */
-body::before {
-  content: "";
-  position: fixed;
-  inset: -25%;
-  z-index: -1;
-  pointer-events: none;
+/* Near layer: aurora glow. Moves with the pointer (fast) for depth. */
+.site-bg__aurora-wrap {
+  transform: translate3d(calc(var(--px) * 46px), calc(var(--py) * 46px), 0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.site-bg__aurora {
+  position: absolute;
+  inset: -30%;
   background:
     radial-gradient(35vw 35vw at 18% 20%, var(--aurora-1), transparent 60%),
     radial-gradient(30vw 30vw at 84% 26%, var(--aurora-2), transparent 60%),
@@ -220,7 +241,12 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::before {
+  .site-bg__doodle,
+  .site-bg__aurora-wrap {
+    transform: none;
+    transition: none;
+  }
+  .site-bg__aurora {
     animation: none;
   }
 }
