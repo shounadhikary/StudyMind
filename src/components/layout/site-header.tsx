@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { HeaderAuth } from "@/components/layout/header-auth";
+import { BrandIcon } from "@/components/shared/brand-mark";
 
 const NAV_LINKS = [
   { label: "Features", href: "/#features" },
@@ -15,9 +15,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <BookOpen className="size-4.5" />
-          </span>
+          <BrandIcon />
           <span className="font-heading text-lg font-semibold tracking-tight">
             StudyMind
           </span>

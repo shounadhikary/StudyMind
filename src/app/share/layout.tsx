@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BrandIcon } from "@/components/shared/brand-mark";
 
 export default function ShareLayout({
   children,
@@ -14,9 +14,7 @@ export default function ShareLayout({
       <header className="border-b">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <BookOpen className="size-4.5" />
-            </span>
+            <BrandIcon />
             <span className="font-heading text-lg font-semibold tracking-tight">
               StudyMind
             </span>

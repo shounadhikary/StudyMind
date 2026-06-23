@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { BookOpen, ShieldCheck, Sparkles, Brain, GraduationCap } from "lucide-react";
+import { ShieldCheck, Sparkles, Brain, GraduationCap } from "lucide-react";
 
 import { GitHubIcon, LinkedInIcon } from "@/components/shared/brand-icons";
+import { BrandIcon } from "@/components/shared/brand-mark";
 
 const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Secure & Private" },
@@ -66,9 +67,7 @@ export function SiteFooter() {
           {/* Brand block */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <BookOpen className="size-4.5" />
-              </span>
+              <BrandIcon />
               <span className="font-heading text-lg font-semibold tracking-tight">
                 StudyMind
               </span>

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen } from "lucide-react";
 
 import {
   Sidebar,
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_NAV, APP_NAV_SECONDARY } from "@/lib/navigation";
 import { UserMenu } from "@/components/layout/user-menu";
+import { BrandIcon } from "@/components/shared/brand-mark";
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -36,9 +36,7 @@ export function AppSidebar() {
               tooltip="StudyMind"
               render={<Link href="/dashboard" />}
             >
-              <span className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <BookOpen className="size-4.5" />
-              </span>
+              <BrandIcon />
               <span className="font-heading text-base font-semibold tracking-tight">
                 StudyMind
               </span>
