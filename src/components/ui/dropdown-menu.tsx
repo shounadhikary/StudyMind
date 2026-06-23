@@ -53,15 +53,19 @@ function DropdownMenuGroup({ ...props }: MenuPrimitive.Group.Props) {
   return <MenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
 }
 
+// Plain <div> rather than Base UI's MenuPrimitive.GroupLabel: GroupLabel
+// requires a surrounding <Menu.Group>, but labels are commonly used as a
+// standalone header (e.g. the account header in the user menu). A styled div
+// works anywhere and matches the classic shadcn behavior.
 function DropdownMenuLabel({
   className,
   inset,
   ...props
-}: MenuPrimitive.GroupLabel.Props & {
+}: React.ComponentProps<"div"> & {
   inset?: boolean
 }) {
   return (
-    <MenuPrimitive.GroupLabel
+    <div
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
