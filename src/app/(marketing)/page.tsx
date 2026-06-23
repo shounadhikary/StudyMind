@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { GitHubIcon } from "@/components/shared/brand-icons";
+import { StoreBadges } from "@/components/marketing/store-badges";
 
 const FEATURES = [
   {
@@ -135,6 +136,7 @@ export default function LandingPage() {
         <p className="mt-4 text-xs text-muted-foreground">
           No credit card required · Powered by Gemini &amp; Groq
         </p>
+        <StoreBadges className="mt-8 justify-center" />
       </section>
 
       {/* Features */}

@@ -124,7 +124,7 @@ export function SiteFooter() {
       {/* Bottom bar */}
       <div className="border-t">
         <div className="mx-auto max-w-6xl px-6 py-5 text-center text-sm text-muted-foreground">
-          © 2026 StudyMind · Built with{" "}
+          © 2025 StudyMind · Built with{" "}
           <span className="text-primary">♥</span> for learners.
         </div>
       </div>

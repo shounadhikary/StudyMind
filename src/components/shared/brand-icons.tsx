@@ -58,7 +58,12 @@ export function AppleIcon({
   );
 }
 
-/** Google Play triangle, stylized with the brand gradient. */
+/**
+ * Google Play mark - the four-facet play triangle in its brand colors.
+ * Built as four polygons tiling a right-pointing triangle (spine on the left,
+ * tip at the right): green/blue on top, red/yellow below, blue and yellow
+ * meeting at the tip like the original.
+ */
 export function GooglePlayIcon({
   className = "size-4",
   ...props
@@ -70,24 +75,10 @@ export function GooglePlayIcon({
       className={className}
       {...props}
     >
-      <defs>
-        <linearGradient
-          id="studymind-gplay"
-          x1="0%"
-          y1="0%"
-          x2="100%"
-          y2="100%"
-        >
-          <stop offset="0%" stopColor="#00C3FF" />
-          <stop offset="33%" stopColor="#00E676" />
-          <stop offset="66%" stopColor="#FFCE00" />
-          <stop offset="100%" stopColor="#FF3D00" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M3.6 2.3a1 1 0 0 0-.6.92v17.56a1 1 0 0 0 1.5.87l15.12-8.78a1 1 0 0 0 0-1.74L4.5 2.35a1 1 0 0 0-.9-.05z"
-        fill="url(#studymind-gplay)"
-      />
+      <polygon points="4,3 4,12 12,7.5" fill="#00E676" />
+      <polygon points="12,7.5 4,12 20,12" fill="#00C3FF" />
+      <polygon points="4,12 20,12 12,16.5" fill="#FFCE00" />
+      <polygon points="4,12 4,21 12,16.5" fill="#FF3D00" />
     </svg>
   );
 }
