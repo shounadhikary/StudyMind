@@ -14,15 +14,24 @@ export function ClerkThemeProvider({
   children: React.ReactNode;
 }) {
   const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <ClerkProvider
       appearance={{
-        theme: resolvedTheme === "dark" ? dark : undefined,
+        theme: isDark ? dark : undefined,
         variables: {
           colorPrimary: "#4f46e5",
           borderRadius: "0.625rem",
         },
+        // Apple & GitHub ship black monochrome logos that disappear on the
+        // dark card - force them white. (Google is multicolor, leave it.)
+        elements: isDark
+          ? {
+              socialButtonsProviderIcon__apple: "brightness-0 invert",
+              socialButtonsProviderIcon__github: "brightness-0 invert",
+            }
+          : undefined,
       }}
     >
       {children}
