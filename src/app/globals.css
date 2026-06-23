@@ -102,6 +102,11 @@
   --sidebar-accent-foreground: oklch(0.21 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.515 0.21 269);
+
+  /* Aurora glow blooms - soft pastels for light mode */
+  --aurora-1: oklch(0.7 0.18 269 / 0.18);
+  --aurora-2: oklch(0.78 0.12 200 / 0.16);
+  --aurora-3: oklch(0.72 0.18 300 / 0.14);
 }
 
 .dark {
@@ -144,6 +149,11 @@
   --sidebar-accent-foreground: oklch(0.97 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.62 0.2 269);
+
+  /* Aurora glow blooms - richer & more vivid on the dark chalkboard */
+  --aurora-1: oklch(0.62 0.21 269 / 0.34);
+  --aurora-2: oklch(0.64 0.14 200 / 0.3);
+  --aurora-3: oklch(0.62 0.2 300 / 0.26);
 }
 
 @layer base {
@@ -176,4 +186,41 @@ body {
 
 .dark body {
   background-image: url("/study-bg-dark.jpg");
+}
+
+/* ---------------------------------------------------------------------------
+   Aurora: slow-drifting light blooms that glow over the doodle frame.
+   Pure CSS, GPU-composited (transform only). Sits behind all content.
+   --------------------------------------------------------------------------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(35vw 35vw at 18% 20%, var(--aurora-1), transparent 60%),
+    radial-gradient(30vw 30vw at 84% 26%, var(--aurora-2), transparent 60%),
+    radial-gradient(42vw 42vw at 74% 82%, var(--aurora-3), transparent 62%),
+    radial-gradient(28vw 28vw at 22% 88%, var(--aurora-2), transparent 60%);
+  will-change: transform;
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(2.5%, -2%, 0) scale(1.1) rotate(2deg);
+  }
+  100% {
+    transform: translate3d(-2%, 1.5%, 0) scale(1.06) rotate(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
 }
