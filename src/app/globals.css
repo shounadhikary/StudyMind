@@ -250,3 +250,17 @@
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Clerk social logins: Apple & GitHub ship solid-black brand logos that
+   disappear on the dark sign-in card. Force just those two white (Google is
+   multicolor, so leave it). Targets Clerk's stable cl-* classes directly.
+   --------------------------------------------------------------------------- */
+.dark .cl-socialButtonsProviderIcon__apple,
+.dark .cl-socialButtonsProviderIcon__github,
+.dark .cl-socialButtonsIconButton__apple img,
+.dark .cl-socialButtonsIconButton__github img,
+.dark .cl-socialButtonsBlockButton__apple img,
+.dark .cl-socialButtonsBlockButton__github img {
+  filter: brightness(0) invert(1) !important;
+}
