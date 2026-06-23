@@ -164,7 +164,7 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans antialiased;
+    @apply font-serif antialiased;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
