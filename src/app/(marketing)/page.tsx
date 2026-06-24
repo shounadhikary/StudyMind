@@ -154,7 +154,7 @@ export default function LandingPage() {
             {FEATURES.map((feature) => (
               <Card
                 key={feature.title}
-                className="border-border/60 transition-colors hover:border-border"
+                className="border-border/60 transition-colors hover:border-border dark:bg-[#02898A]"
               >
                 <CardHeader>
                   <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
