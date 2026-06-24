@@ -13,7 +13,7 @@ export function AppTopbar() {
   const title = active?.title ?? "StudyMind";
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm dark:bg-[#014B4C]">
       <SidebarTrigger className="-ml-1" />
       <Separator
         orientation="vertical"
