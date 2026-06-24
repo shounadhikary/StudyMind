@@ -139,7 +139,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="scroll-mt-20">
+      <section id="features" className="scroll-mt-20 border-t bg-card/30">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
@@ -174,7 +174,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section>
+      <section className="border-t">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
@@ -201,7 +201,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA band */}
-      <section>
+      <section className="border-t bg-card/30">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-balance">
             Ready to turn your notes into knowledge?
