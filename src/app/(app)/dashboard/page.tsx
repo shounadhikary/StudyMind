@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { format, subDays, formatDistanceToNow } from "date-fns";
 import {
   Upload,
   FileText,
@@ -12,11 +14,28 @@ import {
   TrendingUp,
   ArrowRight,
   Brain,
+  Flame,
+  Check,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
+import { StudyTimeChart } from "@/components/analytics/charts";
+import { listDocuments } from "@/lib/documents/queries";
+import { listTasks } from "@/lib/tasks/queries";
+import {
+  getOverviewStats,
+  getStudyTimeSeries,
+} from "@/lib/analytics/queries";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -42,36 +61,69 @@ const FEATURES = [
   {
     icon: Layers,
     title: "Flashcards + Spaced Repetition",
-    description: "Anki-style SM-2 scheduling so you review right when you're about to forget.",
+    description:
+      "Anki-style SM-2 scheduling so you review right when you're about to forget.",
     href: "/flashcards",
   },
   {
     icon: Network,
     title: "Mind Maps",
-    description: "Turn a document into an interactive, pannable map of how concepts connect.",
+    description:
+      "Turn a document into an interactive, pannable map of how concepts connect.",
     href: "/mind-maps",
   },
   {
     icon: CalendarDays,
     title: "Study Planner",
-    description: "Plan tasks on a calendar, track what's due, and feed it into your progress.",
+    description:
+      "Plan tasks on a calendar, track what's due, and feed it into your progress.",
     href: "/planner",
   },
   {
     icon: Timer,
     title: "Pomodoro + Focus",
-    description: "Configurable focus sessions that log straight into your analytics.",
+    description:
+      "Configurable focus sessions that log straight into your analytics.",
     href: "/planner",
   },
   {
     icon: TrendingUp,
     title: "Progress & Insights",
-    description: "Study-time trends, quiz accuracy, and automatic focus-area detection.",
+    description:
+      "Study-time trends, quiz accuracy, and automatic focus-area detection.",
     href: "/progress",
   },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const { userId } = await auth();
+  if (!userId) return null;
+
+  const [documents, tasks, overview, series] = await Promise.all([
+    listDocuments(userId),
+    listTasks(userId),
+    getOverviewStats(userId),
+    getStudyTimeSeries(userId, 7),
+  ]);
+
+  const recentDocs = documents.slice(0, 3);
+  const tasksDone = tasks.filter((t) => t.status === "DONE").length;
+  const weekMinutes = series.reduce((sum, p) => sum + p.value, 0);
+  const studyHours = Math.round((weekMinutes / 60) * 10) / 10;
+
+  // Last 7 days, oldest -> newest, with weekday labels + activity flag.
+  const today = new Date();
+  const week = series.map((point, i) => {
+    const date = subDays(today, series.length - 1 - i);
+    return {
+      letter: format(date, "EEEEE"),
+      label: format(date, "EEE"),
+      value: point.value,
+      active: point.value > 0,
+    };
+  });
+  const chartData = week.map((d) => ({ date: d.label, value: d.value }));
+
   return (
     <div className="space-y-8">
       <OnboardingTour />
@@ -108,13 +160,13 @@ export default function DashboardPage() {
           <div className="relative flex size-28 items-center justify-center rounded-3xl border border-primary/30 bg-primary/15 text-primary shadow-lg">
             <Brain className="size-12" />
           </div>
-          <span className="absolute right-10 top-10 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute top-10 right-10 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
             <MessagesSquare className="size-5" />
           </span>
-          <span className="absolute bottom-12 right-8 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute right-8 bottom-12 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
             <ListChecks className="size-5" />
           </span>
-          <span className="absolute left-2 top-1/2 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute top-1/2 left-2 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
             <FileText className="size-5" />
           </span>
         </div>
@@ -140,6 +192,134 @@ export default function DashboardPage() {
             </Card>
           </Link>
         ))}
+      </div>
+
+      {/* Data row */}
+      <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1.3fr]">
+        {/* Recent documents */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Recent Documents</CardTitle>
+            <CardAction>
+              <Button variant="ghost" size="sm" render={<Link href="/documents" />}>
+                View all
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <CardContent className="space-y-0.5">
+            {recentDocs.length === 0 ? (
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                No documents yet.{" "}
+                <Link href="/documents" className="text-primary hover:underline">
+                  Upload one
+                </Link>
+                .
+              </p>
+            ) : (
+              recentDocs.map((doc) => {
+                const isPdf =
+                  doc.pageCount != null ||
+                  !!doc.fileUrl?.toLowerCase().endsWith(".pdf");
+                const meta = [
+                  isPdf ? "PDF" : "Note",
+                  doc.pageCount ? `${doc.pageCount} pages` : null,
+                  formatDistanceToNow(doc.createdAt, { addSuffix: true }),
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
+                return (
+                  <Link
+                    key={doc.id}
+                    href={`/documents/${doc.id}`}
+                    className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-accent"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <FileText className="size-4" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{doc.title}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {meta}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Study streak */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Study Streak</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <div className="flex items-center gap-3">
+              <Flame className="size-9 text-orange-500" />
+              <div>
+                <p className="font-heading text-2xl font-semibold tabular-nums">
+                  {overview.currentStreak}{" "}
+                  {overview.currentStreak === 1 ? "day" : "days"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {overview.currentStreak > 0 ? "Keep it up!" : "Start today"}
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              {week.map((d, i) => (
+                <div key={i} className="flex flex-col items-center gap-1.5">
+                  <span className="text-xs text-muted-foreground">
+                    {d.letter}
+                  </span>
+                  <span
+                    className={cn(
+                      "flex size-7 items-center justify-center rounded-full",
+                      d.active
+                        ? "bg-primary text-primary-foreground"
+                        : "border text-muted-foreground",
+                    )}
+                  >
+                    {d.active ? <Check className="size-3.5" /> : null}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* This week */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">This Week</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div>
+                <p className="font-heading text-2xl font-semibold tabular-nums">
+                  {studyHours}
+                </p>
+                <p className="text-xs text-muted-foreground">Study Hours</p>
+              </div>
+              <div>
+                <p className="font-heading text-2xl font-semibold tabular-nums">
+                  {overview.averageAccuracy != null
+                    ? `${overview.averageAccuracy}%`
+                    : "-"}
+                </p>
+                <p className="text-xs text-muted-foreground">Quiz Accuracy</p>
+              </div>
+              <div>
+                <p className="font-heading text-2xl font-semibold tabular-nums">
+                  {tasksDone}
+                </p>
+                <p className="text-xs text-muted-foreground">Tasks Done</p>
+              </div>
+            </div>
+            <StudyTimeChart data={chartData} />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
