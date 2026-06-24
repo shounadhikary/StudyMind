@@ -71,7 +71,7 @@
   --popover-foreground: oklch(0.21 0 0);
 
   /* Accent - calm indigo, used sparingly (primary buttons, links, active) */
-  --primary: oklch(0.515 0.21 269);
+  --primary: oklch(0.6 0.1 195);
   --primary-foreground: oklch(0.985 0 0);
 
   --secondary: oklch(0.97 0 0);
@@ -85,7 +85,7 @@
 
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.515 0.21 269);
+  --ring: oklch(0.6 0.1 195);
 
   /* Chart palette - indigo, emerald, amber, rose, violet */
   --chart-1: oklch(0.55 0.2 269);
@@ -96,12 +96,12 @@
 
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.21 0 0);
-  --sidebar-primary: oklch(0.515 0.21 269);
+  --sidebar-primary: oklch(0.6 0.1 195);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.21 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.515 0.21 269);
+  --sidebar-ring: oklch(0.6 0.1 195);
 
   /* Aurora glow blooms - soft pastels for light mode */
   --aurora-1: oklch(0.7 0.18 269 / 0.18);
@@ -119,7 +119,7 @@
   --popover-foreground: oklch(0.97 0 0);
 
   /* Accent - slightly brighter indigo for contrast on dark surfaces */
-  --primary: oklch(0.62 0.2 269);
+  --primary: oklch(0.66 0.105 195);
   --primary-foreground: oklch(0.985 0 0);
 
   --secondary: oklch(0.23 0 0);
@@ -133,9 +133,9 @@
 
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.62 0.2 269);
+  --ring: oklch(0.66 0.105 195);
 
-  --chart-1: oklch(0.62 0.2 269);
+  --chart-1: oklch(0.66 0.105 195);
   --chart-2: oklch(0.7 0.15 162);
   --chart-3: oklch(0.77 0.16 70);
   --chart-4: oklch(0.7 0.2 18);
@@ -143,12 +143,12 @@
 
   --sidebar: oklch(0.15 0 0);
   --sidebar-foreground: oklch(0.97 0 0);
-  --sidebar-primary: oklch(0.62 0.2 269);
+  --sidebar-primary: oklch(0.66 0.105 195);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.25 0 0);
   --sidebar-accent-foreground: oklch(0.97 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.62 0.2 269);
+  --sidebar-ring: oklch(0.66 0.105 195);
 
   /* Aurora glow blooms - richer & more vivid on the dark chalkboard */
   --aurora-1: oklch(0.62 0.21 269 / 0.34);
