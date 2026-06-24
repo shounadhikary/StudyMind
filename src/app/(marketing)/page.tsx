@@ -163,7 +163,7 @@ export default function LandingPage() {
                   <CardTitle className="mt-3 text-base">
                     {feature.title}
                   </CardTitle>
-                  <CardDescription className="text-pretty">
+                  <CardDescription className="text-pretty text-justify">
                     {feature.description}
                   </CardDescription>
                 </CardHeader>
