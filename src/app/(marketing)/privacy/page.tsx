@@ -40,7 +40,7 @@ export default function PrivacyPage() {
             <h2 className="font-heading text-lg font-semibold">
               {section.heading}
             </h2>
-            <p className="mt-2 text-muted-foreground text-pretty">
+            <p className="mt-2 text-muted-foreground text-pretty text-justify">
               {section.body}
             </p>
           </section>

@@ -12,7 +12,7 @@ export default function AboutPage() {
       <h1 className="font-heading text-4xl font-semibold tracking-tight">
         About StudyMind
       </h1>
-      <div className="mt-8 space-y-6 text-muted-foreground text-pretty">
+      <div className="mt-8 space-y-6 text-muted-foreground text-pretty text-justify">
         <p>
           StudyMind is an AI-powered study companion. Students upload their
           study materials - PDFs, notes, slides - and the app turns them into
