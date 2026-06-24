@@ -139,8 +139,8 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="scroll-mt-20 border-t bg-card/30">
-        <div className="mx-auto max-w-6xl px-6 py-20">
+      <section id="features" className="scroll-mt-20 px-4 sm:px-6">
+        <div className="mx-auto max-w-6xl my-6 rounded-3xl border bg-card/50 px-6 py-14 shadow-sm sm:px-10 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
               Everything you need to study smarter
@@ -174,8 +174,8 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="border-t">
-        <div className="mx-auto max-w-6xl px-6 py-20">
+      <section className="px-4 sm:px-6">
+        <div className="mx-auto max-w-6xl my-6 rounded-3xl border bg-card/50 px-6 py-14 shadow-sm sm:px-10 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
               From PDF to mastery in three steps
@@ -201,8 +201,8 @@ export default function LandingPage() {
       </section>
 
       {/* CTA band */}
-      <section className="border-t bg-card/30">
-        <div className="mx-auto max-w-4xl px-6 py-20 text-center">
+      <section className="px-4 sm:px-6">
+        <div className="mx-auto max-w-4xl my-6 rounded-3xl border bg-card/50 px-6 py-14 text-center shadow-sm sm:px-10 sm:py-16">
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-balance">
             Ready to turn your notes into knowledge?
           </h2>
