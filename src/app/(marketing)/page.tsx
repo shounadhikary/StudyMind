@@ -143,7 +143,8 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl my-6 rounded-3xl border bg-card/50 px-6 py-14 shadow-sm sm:px-10 sm:py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
-              Everything you need to study smarter
+              Everything you need to{" "}
+              <span className="text-primary">study smarter</span>
             </h2>
             <p className="mt-4 text-muted-foreground text-pretty">
               One workspace for your documents and every AI study tool built
@@ -154,13 +155,13 @@ export default function LandingPage() {
             {FEATURES.map((feature) => (
               <Card
                 key={feature.title}
-                className="border-border/60 transition-colors hover:border-border dark:bg-[#02898A]"
+                className="border-border/60 bg-card/40 transition-colors hover:border-primary/50"
               >
                 <CardHeader>
-                  <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
                     <feature.icon className="size-5" />
                   </span>
-                  <CardTitle className="mt-3 text-base">
+                  <CardTitle className="mt-4 text-base font-semibold">
                     {feature.title}
                   </CardTitle>
                   <CardDescription className="text-pretty text-justify">
