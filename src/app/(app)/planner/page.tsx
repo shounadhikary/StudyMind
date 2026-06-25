@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import { Clock, FileText } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeader } from "@/components/shared/page-header";
 import { TasksView } from "@/components/planner/tasks-view";
 import { Pomodoro } from "@/components/planner/pomodoro";
@@ -22,7 +24,30 @@ import type { TaskView } from "@/lib/tasks/types";
 
 export const metadata: Metadata = { title: "Planner" };
 
-export default async function PlannerPage() {
+export default function PlannerPage() {
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Planner"
+        description="Plan study tasks, focus with Pomodoro, and track your goals."
+      />
+      <Suspense fallback={<PlannerSkeleton />}>
+        <PlannerBody />
+      </Suspense>
+    </div>
+  );
+}
+
+function PlannerSkeleton() {
+  return (
+    <div className="space-y-6">
+      <Skeleton className="h-9 w-64 rounded-lg" />
+      <Skeleton className="h-72 w-full rounded-xl" />
+    </div>
+  );
+}
+
+async function PlannerBody() {
   const { userId } = await auth();
   if (!userId) return null;
 
@@ -61,12 +86,7 @@ export default async function PlannerPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Planner"
-        description="Plan study tasks, focus with Pomodoro, and track your goals."
-      />
-
+    <>
       <Tabs defaultValue="tasks">
         <TabsList>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
@@ -133,6 +153,6 @@ export default async function PlannerPage() {
       </Tabs>
 
       <Reminders overdue={overdue} today={dueToday} />
-    </div>
+    </>
   );
 }

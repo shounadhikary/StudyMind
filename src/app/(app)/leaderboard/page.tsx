@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { Trophy } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LeaderboardOptIn } from "@/components/leaderboard/opt-in-card";
@@ -13,7 +15,32 @@ export const metadata: Metadata = { title: "Leaderboard" };
 
 const MEDAL = ["🥇", "🥈", "🥉"];
 
-export default async function LeaderboardPage() {
+export default function LeaderboardPage() {
+  return (
+    <div className="space-y-8">
+      <PageHeader
+        title="Leaderboard"
+        description="Opt-in study rankings - XP from quizzes, reviews, and streaks."
+      />
+      <Suspense fallback={<LeaderboardSkeleton />}>
+        <LeaderboardBody />
+      </Suspense>
+    </div>
+  );
+}
+
+function LeaderboardSkeleton() {
+  return (
+    <div className="space-y-2">
+      <Skeleton className="h-24 w-full rounded-xl" />
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Skeleton key={i} className="h-16 w-full rounded-xl" />
+      ))}
+    </div>
+  );
+}
+
+async function LeaderboardBody() {
   const { userId } = await auth();
   if (!userId) return null;
 
@@ -24,11 +51,6 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Leaderboard"
-        description="Opt-in study rankings - XP from quizzes, reviews, and streaks."
-      />
-
       <LeaderboardOptIn optedIn={pref.optedIn} name={pref.name} />
 
       {entries.length === 0 ? (
