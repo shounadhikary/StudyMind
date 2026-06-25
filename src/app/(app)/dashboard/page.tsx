@@ -129,7 +129,7 @@ export default async function DashboardPage() {
       <OnboardingTour />
 
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-emerald-500/15 via-card to-card p-8 shadow-sm sm:p-10">
+      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-emerald-500/15 via-card/70 to-card/50 p-8 shadow-sm sm:p-10">
         <div className="relative z-10 max-w-xl">
           <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Study{" "}
@@ -184,7 +184,7 @@ export default async function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map((feature) => (
           <Link key={feature.title} href={feature.href} className="group">
-            <Card className="relative h-full pb-10 transition-colors hover:border-emerald-500/50">
+            <Card className="relative h-full pb-10 bg-card/40 transition-colors hover:border-emerald-500/50">
               <CardHeader>
                 <span className="flex size-11 items-center justify-center rounded-full bg-emerald-600 text-white">
                   <feature.icon className="size-5" />
@@ -205,7 +205,7 @@ export default async function DashboardPage() {
       {/* Data row */}
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1.3fr]">
         {/* Recent documents */}
-        <Card>
+        <Card className="bg-card/40">
           <CardHeader>
             <CardTitle className="text-base">Recent Documents</CardTitle>
             <CardAction>
@@ -261,7 +261,7 @@ export default async function DashboardPage() {
         </Card>
 
         {/* Study streak */}
-        <Card>
+        <Card className="bg-card/40">
           <CardHeader>
             <CardTitle className="text-base">Study Streak</CardTitle>
           </CardHeader>
@@ -301,7 +301,7 @@ export default async function DashboardPage() {
         </Card>
 
         {/* This week */}
-        <Card>
+        <Card className="bg-card/40">
           <CardHeader>
             <CardTitle className="text-base">This Week</CardTitle>
           </CardHeader>
