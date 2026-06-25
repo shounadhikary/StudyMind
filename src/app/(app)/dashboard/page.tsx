@@ -129,7 +129,7 @@ export default async function DashboardPage() {
       <OnboardingTour />
 
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/20 via-card to-card p-8 shadow-sm sm:p-10">
+      <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-emerald-500/15 via-card to-card p-8 shadow-sm sm:p-10">
         <div className="relative z-10 max-w-xl">
           <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Study{" "}
@@ -143,7 +143,11 @@ export default async function DashboardPage() {
             around them.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <Button size="lg" render={<Link href="/documents" />}>
+            <Button
+              size="lg"
+              className="bg-emerald-600 text-white hover:bg-emerald-700"
+              render={<Link href="/documents" />}
+            >
               <Upload className="size-4" />
               Upload Document
             </Button>
@@ -160,17 +164,17 @@ export default async function DashboardPage() {
           aria-hidden
           className="pointer-events-none absolute inset-y-0 right-0 hidden w-2/5 items-center justify-center lg:flex"
         >
-          <div className="absolute size-56 rounded-full bg-primary/20 blur-3xl" />
-          <div className="relative flex size-28 items-center justify-center rounded-3xl border border-primary/30 bg-primary/15 text-primary shadow-lg">
+          <div className="absolute size-56 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="relative flex size-28 items-center justify-center rounded-3xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-500 shadow-lg dark:text-emerald-400">
             <Brain className="size-12" />
           </div>
-          <span className="absolute top-10 right-10 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute top-10 right-10 flex size-11 items-center justify-center rounded-2xl border bg-card text-emerald-500 shadow-md dark:text-emerald-400">
             <MessagesSquare className="size-5" />
           </span>
-          <span className="absolute right-8 bottom-12 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute right-8 bottom-12 flex size-11 items-center justify-center rounded-2xl border bg-card text-emerald-500 shadow-md dark:text-emerald-400">
             <ListChecks className="size-5" />
           </span>
-          <span className="absolute top-1/2 left-2 flex size-11 items-center justify-center rounded-2xl border bg-card text-primary shadow-md">
+          <span className="absolute top-1/2 left-2 flex size-11 items-center justify-center rounded-2xl border bg-card text-emerald-500 shadow-md dark:text-emerald-400">
             <FileText className="size-5" />
           </span>
         </div>
@@ -180,7 +184,7 @@ export default async function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map((feature) => (
           <Link key={feature.title} href={feature.href} className="group">
-            <Card className="relative h-full pb-10 transition-colors hover:border-primary/50">
+            <Card className="relative h-full pb-10 transition-colors hover:border-emerald-500/50">
               <CardHeader>
                 <span className="flex size-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 ring-1 ring-inset ring-emerald-500/15 dark:text-emerald-400">
                   <feature.icon className="size-5" />
@@ -192,7 +196,7 @@ export default async function DashboardPage() {
                   {feature.description}
                 </CardDescription>
               </CardHeader>
-              <ArrowRight className="absolute right-4 bottom-4 size-4 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
+              <ArrowRight className="absolute right-4 bottom-4 size-4 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:text-emerald-500 dark:group-hover:text-emerald-400" />
             </Card>
           </Link>
         ))}
@@ -214,7 +218,10 @@ export default async function DashboardPage() {
             {recentDocs.length === 0 ? (
               <p className="py-6 text-center text-sm text-muted-foreground">
                 No documents yet.{" "}
-                <Link href="/documents" className="text-primary hover:underline">
+                <Link
+                  href="/documents"
+                  className="text-emerald-500 hover:underline dark:text-emerald-400"
+                >
                   Upload one
                 </Link>
                 .
@@ -237,7 +244,7 @@ export default async function DashboardPage() {
                     href={`/documents/${doc.id}`}
                     className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-accent"
                   >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
                       <FileText className="size-4" />
                     </span>
                     <div className="min-w-0 flex-1">
@@ -281,7 +288,7 @@ export default async function DashboardPage() {
                     className={cn(
                       "flex size-7 items-center justify-center rounded-full",
                       d.active
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-emerald-600 text-white"
                         : "border text-muted-foreground",
                     )}
                   >
