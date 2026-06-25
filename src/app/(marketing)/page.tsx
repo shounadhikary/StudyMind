@@ -144,7 +144,9 @@ export default function LandingPage() {
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight">
               Everything you need to{" "}
-              <span className="text-primary">study smarter</span>
+              <span className="text-emerald-500 dark:text-emerald-400">
+                study smarter
+              </span>
             </h2>
             <p className="mt-4 text-muted-foreground text-pretty">
               One workspace for your documents and every AI study tool built
@@ -158,7 +160,7 @@ export default function LandingPage() {
                 className="border-border/60 bg-card/40 transition-colors hover:border-primary/50"
               >
                 <CardHeader>
-                  <span className="flex size-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 ring-1 ring-inset ring-emerald-500/15 dark:text-emerald-400">
                     <feature.icon className="size-5" />
                   </span>
                   <CardTitle className="mt-4 text-base font-semibold">
