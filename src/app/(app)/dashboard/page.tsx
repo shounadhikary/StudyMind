@@ -174,9 +174,6 @@ export default async function DashboardPage() {
           <span className="absolute right-8 bottom-12 flex size-11 items-center justify-center rounded-2xl border bg-card text-emerald-500 shadow-md dark:text-emerald-400">
             <ListChecks className="size-5" />
           </span>
-          <span className="absolute top-1/2 left-2 flex size-11 items-center justify-center rounded-2xl border bg-card text-emerald-500 shadow-md dark:text-emerald-400">
-            <FileText className="size-5" />
-          </span>
         </div>
       </section>
 
