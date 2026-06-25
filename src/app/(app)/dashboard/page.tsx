@@ -132,7 +132,11 @@ export default async function DashboardPage() {
       <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/20 via-card to-card p-8 shadow-sm sm:p-10">
         <div className="relative z-10 max-w-xl">
           <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Study <span className="text-primary">smarter</span>, not harder.
+            Study{" "}
+            <span className="text-emerald-500 dark:text-emerald-400">
+              smarter
+            </span>
+            , not harder.
           </h1>
           <p className="mt-3 text-muted-foreground text-pretty">
             One workspace for your documents and every AI study tool built
@@ -178,7 +182,7 @@ export default async function DashboardPage() {
           <Link key={feature.title} href={feature.href} className="group">
             <Card className="relative h-full pb-10 transition-colors hover:border-primary/50">
               <CardHeader>
-                <span className="flex size-11 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <span className="flex size-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 ring-1 ring-inset ring-emerald-500/15 dark:text-emerald-400">
                   <feature.icon className="size-5" />
                 </span>
                 <CardTitle className="mt-4 text-base text-pretty">
