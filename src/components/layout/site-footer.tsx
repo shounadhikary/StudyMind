@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck, Sparkles, Brain, GraduationCap } from "lucide-react";
+import { ShieldCheck, Sparkles, Brain, GraduationCap, Mail } from "lucide-react";
 
 import { GitHubIcon, LinkedInIcon } from "@/components/shared/brand-icons";
 import { BrandIcon } from "@/components/shared/brand-mark";
@@ -76,7 +76,7 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center gap-2">
               <a
-                href="https://github.com"
+                href="https://github.com/shounadhikary"
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="GitHub"
@@ -85,13 +85,20 @@ export function SiteFooter() {
                 <GitHubIcon className="size-4" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/shoun-adhikary/"
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="LinkedIn"
                 className="flex size-9 items-center justify-center rounded-lg border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
                 <LinkedInIcon className="size-4" />
+              </a>
+              <a
+                href="mailto:shounadhikary725@gmail.com"
+                aria-label="Email"
+                className="flex size-9 items-center justify-center rounded-lg border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                <Mail className="size-4" />
               </a>
             </div>
           </div>

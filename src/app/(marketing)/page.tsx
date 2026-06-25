@@ -123,7 +123,7 @@ export default function LandingPage() {
             variant="outline"
             render={
               <a
-                href="https://github.com"
+                href="https://github.com/shounadhikary"
                 target="_blank"
                 rel="noreferrer noopener"
               />
