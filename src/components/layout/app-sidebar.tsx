@@ -59,7 +59,7 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className={
                         active
-                          ? "data-active:bg-sidebar-primary/10 data-active:text-sidebar-primary"
+                          ? "data-active:bg-emerald-500/10 data-active:text-emerald-600 dark:data-active:text-emerald-400"
                           : undefined
                       }
                       render={<Link href={item.href} />}
@@ -86,7 +86,7 @@ export function AppSidebar() {
                   tooltip={item.title}
                   className={
                     active
-                      ? "data-active:bg-sidebar-primary/10 data-active:text-sidebar-primary"
+                      ? "data-active:bg-emerald-500/10 data-active:text-emerald-600 dark:data-active:text-emerald-400"
                       : undefined
                   }
                   render={<Link href={item.href} />}
