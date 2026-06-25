@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppTopbar } from "@/components/layout/app-topbar";
-import { syncUser } from "@/lib/auth/sync-user";
+import { syncUserOnce } from "@/lib/auth/sync-user";
 
 // All app routes require auth (and read headers via Clerk), so they're dynamic.
 export const dynamic = "force-dynamic";
@@ -15,11 +15,13 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   // Route protection lives in proxy.ts. Once a database is configured, keep the
-  // Supabase users row in sync on first request (best-effort; never blocks UI).
+  // Supabase users row in sync - but only once per server lifetime, not on
+  // every navigation (best-effort; never blocks UI). `auth()` reads the session
+  // cookie without a network call, so the common already-synced path is free.
   if (process.env.DATABASE_URL) {
     try {
-      const user = await currentUser();
-      if (user) await syncUser(user);
+      const { userId } = await auth();
+      if (userId) await syncUserOnce(userId);
     } catch (error) {
       console.error("[user-sync] failed:", error);
     }
