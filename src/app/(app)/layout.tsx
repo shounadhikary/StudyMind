@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 
@@ -9,29 +10,36 @@ import { syncUserOnce } from "@/lib/auth/sync-user";
 // All app routes require auth (and read headers via Clerk), so they're dynamic.
 export const dynamic = "force-dynamic";
 
-export default async function AppLayout({
+/**
+ * Best-effort user sync, rendered inside <Suspense> so its cookie read
+ * (`auth()`) never blocks the layout shell. A layout that awaits runtime data
+ * at the top level blocks navigation and prevents the route's loading.tsx from
+ * showing; keeping this off the critical path lets the shell paint instantly.
+ */
+async function UserSync() {
+  if (!process.env.DATABASE_URL) return null;
+  try {
+    const { userId } = await auth();
+    if (userId) await syncUserOnce(userId);
+  } catch (error) {
+    console.error("[user-sync] failed:", error);
+  }
+  return null;
+}
+
+export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Route protection lives in proxy.ts. Once a database is configured, keep the
-  // Supabase users row in sync - but only once per server lifetime, not on
-  // every navigation (best-effort; never blocks UI). `auth()` reads the session
-  // cookie without a network call, so the common already-synced path is free.
-  if (process.env.DATABASE_URL) {
-    try {
-      const { userId } = await auth();
-      if (userId) await syncUserOnce(userId);
-    } catch (error) {
-      console.error("[user-sync] failed:", error);
-    }
-  }
-
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="bg-transparent">
         <AppTopbar />
+        <Suspense fallback={null}>
+          <UserSync />
+        </Suspense>
         <div className="flex flex-1 flex-col">
           <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
             {children}

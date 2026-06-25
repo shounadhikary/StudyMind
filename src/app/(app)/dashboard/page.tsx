@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { format, subDays, formatDistanceToNow } from "date-fns";
@@ -28,6 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import { StudyTimeChart } from "@/components/analytics/charts";
 import { listDocuments } from "@/lib/documents/queries";
@@ -95,35 +97,7 @@ const FEATURES = [
   },
 ];
 
-export default async function DashboardPage() {
-  const { userId } = await auth();
-  if (!userId) return null;
-
-  const [documents, tasks, overview, series] = await Promise.all([
-    listDocuments(userId),
-    listTasks(userId),
-    getOverviewStats(userId),
-    getStudyTimeSeries(userId, 7),
-  ]);
-
-  const recentDocs = documents.slice(0, 3);
-  const tasksDone = tasks.filter((t) => t.status === "DONE").length;
-  const weekMinutes = series.reduce((sum, p) => sum + p.value, 0);
-  const studyHours = Math.round((weekMinutes / 60) * 10) / 10;
-
-  // Last 7 days, oldest -> newest, with weekday labels + activity flag.
-  const today = new Date();
-  const week = series.map((point, i) => {
-    const date = subDays(today, series.length - 1 - i);
-    return {
-      letter: format(date, "EEEEE"),
-      label: format(date, "EEE"),
-      value: point.value,
-      active: point.value > 0,
-    };
-  });
-  const chartData = week.map((d) => ({ date: d.label, value: d.value }));
-
+export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <OnboardingTour />
@@ -199,136 +173,182 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* Data row */}
-      <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1.3fr]">
-        {/* Recent documents */}
-        <Card className="bg-card/40">
-          <CardHeader>
-            <CardTitle className="text-base">Recent Documents</CardTitle>
-            <CardAction>
-              <Button variant="ghost" size="sm" render={<Link href="/documents" />}>
-                View all
-              </Button>
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-0.5">
-            {recentDocs.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                No documents yet.{" "}
+      {/* Data row - streams in so the shell above paints instantly. */}
+      <Suspense fallback={<DataRowSkeleton />}>
+        <DataRow />
+      </Suspense>
+    </div>
+  );
+}
+
+function DataRowSkeleton() {
+  return (
+    <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1.3fr]">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <Skeleton key={i} className="h-56 w-full rounded-xl" />
+      ))}
+    </div>
+  );
+}
+
+async function DataRow() {
+  const { userId } = await auth();
+  if (!userId) return null;
+
+  const [documents, tasks, overview, series] = await Promise.all([
+    listDocuments(userId),
+    listTasks(userId),
+    getOverviewStats(userId),
+    getStudyTimeSeries(userId, 7),
+  ]);
+
+  const recentDocs = documents.slice(0, 3);
+  const tasksDone = tasks.filter((t) => t.status === "DONE").length;
+  const weekMinutes = series.reduce((sum, p) => sum + p.value, 0);
+  const studyHours = Math.round((weekMinutes / 60) * 10) / 10;
+
+  // Last 7 days, oldest -> newest, with weekday labels + activity flag.
+  const today = new Date();
+  const week = series.map((point, i) => {
+    const date = subDays(today, series.length - 1 - i);
+    return {
+      letter: format(date, "EEEEE"),
+      label: format(date, "EEE"),
+      value: point.value,
+      active: point.value > 0,
+    };
+  });
+  const chartData = week.map((d) => ({ date: d.label, value: d.value }));
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr_1.3fr]">
+      {/* Recent documents */}
+      <Card className="bg-card/40">
+        <CardHeader>
+          <CardTitle className="text-base">Recent Documents</CardTitle>
+          <CardAction>
+            <Button variant="ghost" size="sm" render={<Link href="/documents" />}>
+              View all
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="space-y-0.5">
+          {recentDocs.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              No documents yet.{" "}
+              <Link
+                href="/documents"
+                className="text-emerald-500 hover:underline dark:text-emerald-400"
+              >
+                Upload one
+              </Link>
+              .
+            </p>
+          ) : (
+            recentDocs.map((doc) => {
+              const isPdf =
+                doc.pageCount != null ||
+                !!doc.fileUrl?.toLowerCase().endsWith(".pdf");
+              const meta = [
+                isPdf ? "PDF" : "Note",
+                doc.pageCount ? `${doc.pageCount} pages` : null,
+                formatDistanceToNow(doc.createdAt, { addSuffix: true }),
+              ]
+                .filter(Boolean)
+                .join(" · ");
+              return (
                 <Link
-                  href="/documents"
-                  className="text-emerald-500 hover:underline dark:text-emerald-400"
+                  key={doc.id}
+                  href={`/documents/${doc.id}`}
+                  className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-accent"
                 >
-                  Upload one
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
+                    <FileText className="size-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{doc.title}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {meta}
+                    </p>
+                  </div>
                 </Link>
-                .
+              );
+            })
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Study streak */}
+      <Card className="bg-card/40">
+        <CardHeader>
+          <CardTitle className="text-base">Study Streak</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <div className="flex items-center gap-3">
+            <Flame className="size-9 text-orange-500" />
+            <div>
+              <p className="font-heading text-2xl font-semibold tabular-nums">
+                {overview.currentStreak}{" "}
+                {overview.currentStreak === 1 ? "day" : "days"}
               </p>
-            ) : (
-              recentDocs.map((doc) => {
-                const isPdf =
-                  doc.pageCount != null ||
-                  !!doc.fileUrl?.toLowerCase().endsWith(".pdf");
-                const meta = [
-                  isPdf ? "PDF" : "Note",
-                  doc.pageCount ? `${doc.pageCount} pages` : null,
-                  formatDistanceToNow(doc.createdAt, { addSuffix: true }),
-                ]
-                  .filter(Boolean)
-                  .join(" · ");
-                return (
-                  <Link
-                    key={doc.id}
-                    href={`/documents/${doc.id}`}
-                    className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-accent"
-                  >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
-                      <FileText className="size-4" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{doc.title}</p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {meta}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })
-            )}
-          </CardContent>
-        </Card>
+              <p className="text-xs text-muted-foreground">
+                {overview.currentStreak > 0 ? "Keep it up!" : "Start today"}
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            {week.map((d, i) => (
+              <div key={i} className="flex flex-col items-center gap-1.5">
+                <span className="text-xs text-muted-foreground">
+                  {d.letter}
+                </span>
+                <span
+                  className={cn(
+                    "flex size-7 items-center justify-center rounded-full",
+                    d.active
+                      ? "bg-emerald-600 text-white"
+                      : "border text-muted-foreground",
+                  )}
+                >
+                  {d.active ? <Check className="size-3.5" /> : null}
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Study streak */}
-        <Card className="bg-card/40">
-          <CardHeader>
-            <CardTitle className="text-base">Study Streak</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <div className="flex items-center gap-3">
-              <Flame className="size-9 text-orange-500" />
-              <div>
-                <p className="font-heading text-2xl font-semibold tabular-nums">
-                  {overview.currentStreak}{" "}
-                  {overview.currentStreak === 1 ? "day" : "days"}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {overview.currentStreak > 0 ? "Keep it up!" : "Start today"}
-                </p>
-              </div>
+      {/* This week */}
+      <Card className="bg-card/40">
+        <CardHeader>
+          <CardTitle className="text-base">This Week</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="font-heading text-2xl font-semibold tabular-nums">
+                {studyHours}
+              </p>
+              <p className="text-xs text-muted-foreground">Study Hours</p>
             </div>
-            <div className="flex justify-between">
-              {week.map((d, i) => (
-                <div key={i} className="flex flex-col items-center gap-1.5">
-                  <span className="text-xs text-muted-foreground">
-                    {d.letter}
-                  </span>
-                  <span
-                    className={cn(
-                      "flex size-7 items-center justify-center rounded-full",
-                      d.active
-                        ? "bg-emerald-600 text-white"
-                        : "border text-muted-foreground",
-                    )}
-                  >
-                    {d.active ? <Check className="size-3.5" /> : null}
-                  </span>
-                </div>
-              ))}
+            <div>
+              <p className="font-heading text-2xl font-semibold tabular-nums">
+                {overview.averageAccuracy != null
+                  ? `${overview.averageAccuracy}%`
+                  : "-"}
+              </p>
+              <p className="text-xs text-muted-foreground">Quiz Accuracy</p>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* This week */}
-        <Card className="bg-card/40">
-          <CardHeader>
-            <CardTitle className="text-base">This Week</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div>
-                <p className="font-heading text-2xl font-semibold tabular-nums">
-                  {studyHours}
-                </p>
-                <p className="text-xs text-muted-foreground">Study Hours</p>
-              </div>
-              <div>
-                <p className="font-heading text-2xl font-semibold tabular-nums">
-                  {overview.averageAccuracy != null
-                    ? `${overview.averageAccuracy}%`
-                    : "-"}
-                </p>
-                <p className="text-xs text-muted-foreground">Quiz Accuracy</p>
-              </div>
-              <div>
-                <p className="font-heading text-2xl font-semibold tabular-nums">
-                  {tasksDone}
-                </p>
-                <p className="text-xs text-muted-foreground">Tasks Done</p>
-              </div>
+            <div>
+              <p className="font-heading text-2xl font-semibold tabular-nums">
+                {tasksDone}
+              </p>
+              <p className="text-xs text-muted-foreground">Tasks Done</p>
             </div>
-            <StudyTimeChart data={chartData} />
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+          <StudyTimeChart data={chartData} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
