@@ -68,8 +68,26 @@ chunk (token-aware + overlap, page-tracked)
   → answer (streamed) with page-level citations
 ```
 
-Pure pieces (`chunk`, `context`) are unit-tested; retrieval uses pgvector's
-`<=>` operator via raw SQL through Prisma.
+The pure pieces (`chunk`, `context`) are deterministic and dependency-free
+(easy to test in isolation); retrieval uses pgvector's `<=>` operator via raw
+SQL through Prisma.
+
+### Streaming UI with an instant app shell
+
+Every authenticated page is split into a **static shell that paints
+immediately** and **data-dependent sections that stream in** behind
+`<Suspense>` skeletons - so navigation never blocks on a database round-trip:
+
+- The `(app)` layout renders **synchronously**. In Next 16 an `async` layout
+  that awaits runtime data (cookies, `headers()`) blocks navigation and
+  suppresses the route's `loading.tsx`; the best-effort user sync is therefore
+  moved into its own `<Suspense>` boundary, off the critical path.
+- The signed-in Clerk user is reconciled into Postgres **once per server
+  process** (gated by the lightweight cookie-only `auth()`), instead of paying a
+  Clerk network round-trip plus a DB upsert on every navigation.
+- Pages like the dashboard render their hero + feature grid instantly and stream
+  only the data row (recent docs, streak, weekly stats) once queries resolve.
+- Dev runs on the **Turbopack** bundler with persistent filesystem caching.
 
 ---
 
@@ -110,7 +128,7 @@ date-fns · deployed on Vercel.
 ## 🚀 Getting started
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/shounadhikary/StudyMind.git
 cd StudyMind
 npm install                 # also runs `prisma generate`
 cp .env.example .env.local  # fill in your keys (see below)
@@ -174,6 +192,16 @@ prisma/                 schema + migrations
    pointed at the prod `DIRECT_URL`, or as a one-off).
 4. Deploy. `prisma generate` runs automatically on install; the build is the
    standard `next build`.
+
+---
+
+## 👤 Author
+
+**Shoun Adhikary**
+
+- GitHub: [@shounadhikary](https://github.com/shounadhikary)
+- LinkedIn: [shoun-adhikary](https://www.linkedin.com/in/shoun-adhikary/)
+- Email: [shounadhikary725@gmail.com](mailto:shounadhikary725@gmail.com)
 
 ---
 
