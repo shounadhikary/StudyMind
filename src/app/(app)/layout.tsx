@@ -46,7 +46,7 @@ export default function AppLayout({
           </div>
           <footer className="border-t">
             <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-              <span>© 2026 StudyMind · Built with ♥ for learners.</span>
+              <span>© 2026 StudyMind · Built with ♥.</span>
               <div className="flex items-center gap-4">
                 <Link href="/privacy" className="transition-colors hover:text-foreground">
                   Privacy

@@ -128,7 +128,7 @@ export function SiteFooter() {
       <div className="border-t">
         <div className="mx-auto max-w-6xl px-6 py-5 text-center text-sm text-muted-foreground">
           © 2025 StudyMind · Built with{" "}
-          <span className="text-primary">♥</span> for learners.
+          <span className="text-primary">♥</span>.
         </div>
       </div>
     </footer>
