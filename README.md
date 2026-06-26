@@ -7,7 +7,7 @@ Upload your study materials (PDFs or notes) and StudyMind turns them into
 flashcards**, and **mind maps** - then keeps you on track with a **planner**,
 **Pomodoro**, **goals/streaks**, and a **progress dashboard**.
 
-Built as a full-stack + AI engineering portfolio project.
+Built as a full-stack + AI engineering project.
 
 <!-- Add a screenshot or GIF demo here -->
 <!-- ![StudyMind](docs/screenshot.png) -->
@@ -201,10 +201,8 @@ prisma/                 schema + migrations
 
 - GitHub: [@shounadhikary](https://github.com/shounadhikary)
 - LinkedIn: [shoun-adhikary](https://www.linkedin.com/in/shoun-adhikary/)
-- Email: [shounadhikary725@gmail.com](mailto:shounadhikary725@gmail.com)
+- Email: [shounadhikary725@gmail.com](mail-to:shounadhikary725@gmail.com)
 
 ---
 
 ## License
-
-Personal portfolio project.
