@@ -16,7 +16,7 @@ Built as a full-stack + AI engineering project.
 
 ---
 
-## ✨ Features
+## Features
 
 | Area | What it does |
 | ---- | ------------ |
@@ -37,7 +37,7 @@ in the planner, mind-map image export, and native mobile apps.
 
 ---
 
-## 🧠 Engineering highlights
+##  Engineering highlights
 
 ### Multi-provider AI architecture with automatic fallback
 
@@ -91,7 +91,7 @@ immediately** and **data-dependent sections that stream in** behind
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -116,7 +116,7 @@ flowchart LR
 
 ---
 
-## 🧰 Tech stack
+## Tech stack
 
 Next.js 16 · TypeScript · Tailwind CSS v4 · shadcn/ui · Framer Motion ·
 next-themes · Clerk · Supabase (Postgres + pgvector) · Prisma 7 ·
@@ -125,7 +125,7 @@ date-fns · deployed on Vercel.
 
 ---
 
-## 🚀 Getting started
+##  Getting started
 
 ```bash
 git clone https://github.com/shounadhikary/StudyMind.git
@@ -161,7 +161,7 @@ See [`.env.example`](./.env.example). You'll need:
 
 ---
 
-## 📁 Project structure
+##  Project structure
 
 ```
 src/
@@ -182,7 +182,7 @@ prisma/                 schema + migrations
 
 ---
 
-## ☁️ Deployment (Vercel)
+##  Deployment (Vercel)
 
 1. Push this repo to GitHub and import it in Vercel.
 2. Add every variable from `.env.example` in **Project Settings → Environment
@@ -195,7 +195,7 @@ prisma/                 schema + migrations
 
 ---
 
-## 👤 Author
+##  Author
 
 **Shoun Adhikary**
 
